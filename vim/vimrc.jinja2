@@ -1,0 +1,31 @@
+set backup
+let day = strftime("%Y-%m-%d")
+let backupdir = $HOME."/.vim/backup/".day
+silent! let xyz = mkdir(backupdir, "p")
+let cmd = "set backupdir=".backupdir
+execute cmd
+let time = strftime(".%H:%M:%S")
+let cmd = "set backupext=". time
+execute cmd
+
+syntax on
+set number
+set background=dark
+let g:solarized_termcolors = 256
+let g:solarized_visibility = "high"
+let g:solarized_contrast = "high"
+let g:solarized_termtrans = 1
+colorscheme solarized
+set tabstop=4
+
+autocmd FileType rst set syntax=rest
+
+set nocompatible
+filetype plugin indent on
+
+execute pathogen#infect()
+
+let g:SuperTabDefaultCompletionType = "context"
+let g:jedi#popup_on_dot = 0
+
+set clipboard=unnamed

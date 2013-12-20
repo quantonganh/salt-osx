@@ -1,0 +1,3 @@
+macvim:
+  pkg:
+    - installed

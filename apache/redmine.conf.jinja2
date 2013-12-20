@@ -1,0 +1,14 @@
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+    ServerName redmine.local
+    DocumentRoot "/Library/WebServer/Sites/redmine/public"
+    <Directory /Library/WebServer/Sites/redmine/public>
+    	Options Indexes ExecCGI FollowSymLinks -MultiViews
+        Order allow,deny
+        Allow from all
+    	PassengerEnabled On
+    	RailsBaseURI /
+    	RailsEnv production
+    </Directory>
+</VirtualHost>

@@ -1,0 +1,11 @@
+halite:
+  virtualenv:
+    - manage
+    - upgrade: True
+    - venv_bin: /usr/local/bin/virtualenv
+    - name: /opt/halite
+  module:
+    - run
+    - name: pip.install
+    - pkgs: halite
+    - bin_env: /opt/halite

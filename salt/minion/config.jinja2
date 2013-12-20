@@ -1,0 +1,20 @@
+master: 127.0.0.1
+backup_mode: minion
+
+startup_states: sls
+sls_list:
+  - vim
+
+ca.cert_base_path: '/etc/pki'
+
+providers:
+  pkg: brew
+  service: launchctl
+
+mysql.host: 'localhost'
+mysql.port: 3306
+mysql.user: 'root'
+mysql.pass: ''
+mysql.db: 'mysql'
+mysql.unix_socket: '/tmp/mysql.sock'
+mysql.charset: 'utf8'

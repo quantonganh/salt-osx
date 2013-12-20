@@ -1,0 +1,20 @@
+<VirtualHost *:80>
+
+  ServerName git.local
+  DocumentRoot "/Users/git/gitlab/public"
+  CustomLog /var/log/apache2/gitlab.access_log combinedvhost
+  ErrorLog /var/log/apache2/gitlab.error_log
+
+  ProxyPass /uploads !
+
+  ProxyRequests     Off
+  ProxyPreserveHost On
+  ProxyPass / http://127.0.0.1:8081/
+
+  <Location />
+    ProxyPassReverse /
+    Order deny,allow
+    Allow from all
+  </Location>
+
+</VirtualHost>

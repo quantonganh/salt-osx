@@ -1,0 +1,10 @@
+halite:
+  module:
+    - run
+    - name: pip.uninstall
+    - pkgs: halite
+    - bin_env: /opt/halite
+
+/opt/halite:
+  file:
+    - absent

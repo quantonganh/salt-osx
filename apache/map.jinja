@@ -1,0 +1,13 @@
+{% set apache_lookup_table = {
+	'MacOS': {
+		'conf': '/etc/apache2/other',
+	},
+	'Debian': {
+		'conf': '/etc/apache2/conf.d',
+	},
+	'RedHat': {
+		'conf': '/etc/httpd/conf.d',
+	},
+} %}
+
+{% set apache = salt['grains.filter_by'](apache_lookup_table, merge=salt['pillar.get']('apache')) %}

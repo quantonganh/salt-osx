@@ -1,0 +1,25 @@
+pillar_roots:
+  base:
+    - /srv/pillar
+
+external_auth:
+  pam:
+    mytestuser:
+      - .*
+      - '@runner'
+      - '@wheel'
+
+halite:
+  level: 'debug'
+  server: 'cherrypy'
+{%- if 'cherrypy_host' in pillar %}
+  host: '{{ pillar['cherrypy_host'] }}'
+{%- endif %}
+{%- if 'cherrypy_port' in pillar %}
+  port: '{{ pillar['cherrypy_port'] }}'
+{%- endif %}
+  cors: False
+  tls: True
+  certpath: '/etc/pki/tls/certs/localhost.crt'
+  keypath: '/etc/pki/tls/certs/localhost.key'
+  pempath: '/etc/pki/tls/certs/localhost.pem'
