@@ -1,0 +1,19 @@
+WSGIPythonPath /opt/djangopypi2/lib/python2.7/site-packages/djangopypi2/
+WSGIPassAuthorization On
+
+<VirtualHost *:80>
+
+	Servername pip.local
+
+  	WSGIScriptAlias / /etc/djangopypi2/wsgi.py
+
+  	CustomLog /var/log/apache2/pip.access_log combined
+  	ErrorLog  /var/log/apache2/pip.error_log
+
+	<Directory /etc/djangopypi2>
+		<Files wsgi.py>
+			Order allow,deny
+			Allow from all
+		</Files>
+	</Directory>
+</VirtualHost>

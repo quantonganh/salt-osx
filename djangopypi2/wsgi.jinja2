@@ -1,0 +1,12 @@
+#!/opt/djangopypi2/bin/python
+
+import os
+import site
+
+site.addsitedir('/opt/djangopypi2/lib/python2.7/site-packages/')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings")
+os.environ.setdefault("DJANGOPYPI2_ROOT", "/etc/djangopypi2")
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
