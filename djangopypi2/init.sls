@@ -57,9 +57,9 @@ collectstatic:
 loaddata_initial:
   module:
     - run
-    - name: django.loaddata
+    - name: django.command
     - settings_module: djangopypi2.website.settings
-    - fixtures: initial
+    - command: "loaddata initial"
     - bin_env: /opt/djangopypi2
     - env: DJANGOPYPI2_ROOT=/etc/djangopypi2
     - require:
