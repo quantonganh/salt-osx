@@ -7,3 +7,11 @@ salt-master:
     - user: root
     - group: wheel
     - mode: 644
+
+sysctl-maxfiles:
+  module:
+    - run
+    - name: sysctl.persist
+    - m_name: kern.maxfiles
+    - value: 16384
+    - config: /etc/sysctl.conf
