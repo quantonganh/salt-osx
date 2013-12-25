@@ -20,3 +20,11 @@
     - mode: 644
     - template: jinja
     - source: salt://apache/redmine.conf.jinja2
+
+httpd:
+  module:
+    - run
+    - name: service.restart
+    - job_label: org.apache.httpd
+    - watch:
+      - file: {{ apache.conf }}/redmine.conf
