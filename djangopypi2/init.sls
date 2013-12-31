@@ -73,7 +73,7 @@ createsuperuser:
     - settings_module: djangopypi2.website.settings
     - bin_env: /opt/djangopypi2
     - username: quanta
-    - email: tonganhquan.net@gmail.com
+    - email: anhquankitty@gmail.com
 
 djangopypi2_hostname:
   cmd:
