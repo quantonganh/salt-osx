@@ -2,6 +2,8 @@ pillar_roots:
   base:
     - /srv/pillar
 
+log_level_logfile: debug
+
 external_auth:
   pam:
     mytestuser:
@@ -10,6 +12,10 @@ external_auth:
       - '@wheel'
 
 max_open_files: 16384
+
+redis.db: '0'
+redis.host: '127.0.0.1'
+redis.port: 6379
 
 halite:
   level: 'debug'

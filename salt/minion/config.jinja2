@@ -1,4 +1,7 @@
-master: 127.0.0.1
+master: {{ pillar['salt']['hostname'] }}
+
+log_level_logfile: debug
+
 backup_mode: minion
 
 startup_states: sls

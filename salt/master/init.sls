@@ -7,6 +7,12 @@ salt-master:
     - user: root
     - group: wheel
     - mode: 644
+  module:
+    - run
+    - name: service.restart
+    - job_label: com.saltstack.master
+    - watch:
+      - file: salt-master
 
 sysctl-maxfiles:
   module:
