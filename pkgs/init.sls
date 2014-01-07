@@ -4,3 +4,5 @@ mypkgs:
     - pkgs:
       - macvim
       - ncdu
+      - mc
+      - plowshare
