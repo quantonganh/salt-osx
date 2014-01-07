@@ -13,13 +13,13 @@ rabbitmq:
     - name: guest
     - runas: quanta
 
-rabbitmq_admin_user:
+rabbitmq_monitor_user:
   rabbitmq_user:
     - present
-    - name: {{ pillar['rabbitmq']['admin']['user'] }}
-    - password: {{ pillar['rabbitmq']['admin']['password'] }}
+    - name: {{ pillar['rabbitmq']['monitor']['user'] }}
+    - password: {{ pillar['rabbitmq']['monitor']['password'] }}
     - force: True
-    - tags: administrator
+    - tags: monitoring
     - perms:
       - '/':
         - '.*'
@@ -31,11 +31,11 @@ rabbitmq_admin_user:
   module:
     - run
     - name: rabbitmq.set_user_tags
-    - m_name: {{ pillar['rabbitmq']['admin']['user'] }}
-    - tags: administrator
+    - m_name: {{ pillar['rabbitmq']['monitor']['user'] }}
+    - tags: monitoring
     - runas: quanta
     - require:
-      - rabbitmq_user: rabbitmq_admin_user
+      - rabbitmq_user: rabbitmq_monitor_user
 
 rabbitmq_management_user:
   rabbitmq_user:
@@ -48,12 +48,9 @@ rabbitmq_management_user:
       - module: rabbitmq
   module:
     - run
-    - name: rabbitmq.set_permissions
-    - vhost: '/'
-    - user: '{{ pillar['rabbitmq']['management']['user'] }}'
-    - conf: '.*'
-    - write: '^$'
-    - read: '.*'
+    - name: rabbitmq.set_user_tags
+    - m_name: {{ pillar['rabbitmq']['management']['user'] }}
+    - tags: management
     - runas: quanta
     - require:
       - rabbitmq_user: rabbitmq_management_user
