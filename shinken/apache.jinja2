@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+  ServerName shinken.local
+  CustomLog /var/log/apache2/shinken.access_log combinedvhost
+  ErrorLog /var/log/apache2/shinken.error_log
+
+  ProxyRequests     Off
+  ProxyPreserveHost On
+  ProxyPass / http://127.0.0.1:7767/
+  ProxyPassReverse / http://127.0.0.1:7767/
+
+  <Location />
+    Order deny,allow
+    Allow from all
+  </Location>
+</VirtualHost>
