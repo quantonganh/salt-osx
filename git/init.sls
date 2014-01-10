@@ -6,12 +6,12 @@ git:
     - groups: 
       - git
     - shell: /bin/sh
-    - home: /Users/git
+    - home: {{ pillar['home'] }}/git
     - createhome: False
     - requite:
       - group: git
 
-/Users/git:
+{{ pillar['home'] }}/git:
   file:
     - directory
     - user: git

@@ -1,7 +1,7 @@
 include:
   - git
 
-{%- set home_dir = "/Users/git" %}
+{%- set home_dir = "{{ pillar['home'] }}/git" %}
 {%- set gitlab_dir = home_dir + "/gitlab" %}
 
 icu4c:
@@ -12,13 +12,13 @@ https://github.com/gitlabhq/gitlabhq.git:
   git:
     - latest
     - rev: 6-3-stable
-    - target: /Users/git/gitlab
+    - target: {{ pillar['home'] }}/git/gitlab
     - user: git
     - require:
-      - file: /Users/git
-    - unless: 'test -d /Users/git/gitlab/.git'
+      - file: {{ pillar['home'] }}/git
+    - unless: 'test -d {{ pillar['home'] }}/git/gitlab/.git'
 
-/Users/git/gitlab/config/gitlab.yml:
+{{ pillar['home'] }}/git/gitlab/config/gitlab.yml:
   file:
     - managed
     - template: jinja
@@ -28,14 +28,14 @@ https://github.com/gitlabhq/gitlabhq.git:
     - mode: 644
 
 {% for d in ('gitlab/log', 'gitlab/tmp', 'gitlab-satellites', 'gitlab/tmp/sockets', 'gitlab/tmp/pids', 'gitlab/public/upload') %}
-/Users/git/{{ d }}:
+{{ pillar['home'] }}/git/{{ d }}:
   file:
     - directory
     - user: git
     - mode: 700
 {% endfor %}
 
-/Users/git/repositories/:
+{{ pillar['home'] }}/git/repositories/:
   file:
     - directory
     - user: git
@@ -45,15 +45,15 @@ https://github.com/gitlabhq/gitlabhq.git:
 repositories-sgid:
   cmd:
     - run
-    - name: find /Users/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
+    - name: find {{ pillar['home'] }}/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
     - require:
-      - file: /Users/git/repositories/
+      - file: {{ pillar['home'] }}/git/repositories/
 
 unicorn:
   gem:
     - installed
 
-/Users/git/gitlab/config/unicorn.rb:
+{{ pillar['home'] }}/git/gitlab/config/unicorn.rb:
   file:
     - managed
     - template: jinja
@@ -64,7 +64,7 @@ unicorn:
     - require:
       - gem: unicorn
 
-/Users/git/gitlab/config/initializers/rack_attack.rb:
+{{ pillar['home'] }}/git/gitlab/config/initializers/rack_attack.rb:
   file:
     - managed
     - template: jinja
@@ -73,7 +73,7 @@ unicorn:
     - group: git
     - mode: 644
 
-/Users/git/gitlab/config/database.yml:
+{{ pillar['home'] }}/git/gitlab/config/database.yml:
   file:
     - managed
     - template: jinja

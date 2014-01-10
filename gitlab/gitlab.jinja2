@@ -49,8 +49,8 @@ production: &base
     path: "tmp/backups"
 
   gitlab_shell:
-    repos_path: /Users/git/repositories/
-    hooks_path: /Users/git/gitlab-shell/hooks/
+    repos_path: {{ pillar['home'] }}/git/repositories/
+    hooks_path: {{ pillar['home'] }}/git/gitlab-shell/hooks/
 
     upload_pack: true
     receive_pack: true

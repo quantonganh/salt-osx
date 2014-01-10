@@ -7,9 +7,9 @@ gitlab_url: "http://{{ pillar['gitlab']['url'] }}/"
 http_settings:
   self_signed_cert: false
 
-repos_path: "/Users/git/repositories"
+repos_path: "{{ pillar['home'] }}/git/repositories"
 
-auth_file: "/Users/git/.ssh/authorized_keys"
+auth_file: "{{ pillar['home'] }}/git/.ssh/authorized_keys"
 
 {# Redis settings used for pushing commit notices to gitlab #}
 redis:

@@ -1,14 +1,14 @@
 worker_processes 2
-working_directory "/Users/git/gitlab"
+working_directory "{{ pillar['home'] }}/git/gitlab"
 
 listen "127.0.0.1:8081", :tcp_nopush => true
 
 timeout 30
 
-pid "/Users/git/gitlab/tmp/pids/unicorn.pid"
+pid "{{ pillar['home'] }}/git/gitlab/tmp/pids/unicorn.pid"
 
-stderr_path "/Users/git/gitlab/log/unicorn.stderr.log"
-stdout_path "/Users/git/gitlab/log/unicorn.stdout.log"
+stderr_path "{{ pillar['home'] }}/git/gitlab/log/unicorn.stderr.log"
+stdout_path "{{ pillar['home'] }}/git/gitlab/log/unicorn.stdout.log"
 
 preload_app true
 GC.respond_to?(:copy_on_write_friendly=) and

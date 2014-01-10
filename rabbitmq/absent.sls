@@ -10,7 +10,7 @@ rabbitmq-absent:
     - require:
       - module: rabbitmq-absent
 
-/Users/quanta/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
+{{ pillar['home'] }}/{{ pillar['user'] }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
   file:
     - absent
     - require:

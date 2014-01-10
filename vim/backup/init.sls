@@ -1,4 +1,4 @@
-/Users/quanta/.vim/backup:
+{{ pillar['home'] }}/{{ pillar['user'] }}/.vim/backup:
   file:
     - directory
     - user: quanta

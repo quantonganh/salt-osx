@@ -1,7 +1,7 @@
 <VirtualHost *:80>
 
   ServerName git.local
-  DocumentRoot "/Users/git/gitlab/public"
+  DocumentRoot "{{ pillar['home'] }}/git/gitlab/public"
   CustomLog /var/log/apache2/gitlab.access_log combinedvhost
   ErrorLog /var/log/apache2/gitlab.error_log
 

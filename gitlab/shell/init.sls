@@ -5,13 +5,13 @@ https://github.com/gitlabhq/gitlab-shell.git:
   git:
     - latest
     - rev: v1.7.9
-    - target: /Users/git/gitlab-shell
+    - target: {{ pillar['home'] }}/git/gitlab-shell
     - user: git
     - require:
-      - file: /Users/git
-    - unless: 'test -d /Users/git/gitlab-shell/.git'
+      - file: {{ pillar['home'] }}/git
+    - unless: 'test -d {{ pillar['home'] }}/git/gitlab-shell/.git'
 
-/Users/git/gitlab-shell/config.yml:
+{{ pillar['home'] }}/git/gitlab-shell/config.yml:
   file:
     - managed
     - template: jinja
@@ -23,9 +23,9 @@ https://github.com/gitlabhq/gitlab-shell.git:
 gitlab_shell_install:
   cmd:
     - run
-    - cwd: /Users/git/gitlab-shell
+    - cwd: {{ pillar['home'] }}/git/gitlab-shell
     - name: ./bin/install
     - user: git
     - require:
-      - file: /Users/git/gitlab-shell/config.yml
+      - file: {{ pillar['home'] }}/git/gitlab-shell/config.yml
 

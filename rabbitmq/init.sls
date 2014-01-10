@@ -7,7 +7,7 @@ rabbitmq:
     - job_label: homebrew.mxcl.rabbitmq
     - runas: quanta
     - require:
-      - file: /Users/quanta/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist
+      - file: {{ pillar['home'] }}/{{ pillar['user'] }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist
   rabbitmq_user:
     - absent
     - name: guest
@@ -72,7 +72,7 @@ rabbitmq-link:
     - require:
       - pkg: rabbitmq
 
-/Users/quanta/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
+{{ pillar['home'] }}/{{ pillar['user'] }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
   file:
     - symlink
     - target: /usr/local/opt/rabbitmq/homebrew.mxcl.rabbitmq.plist

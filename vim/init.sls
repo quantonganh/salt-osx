@@ -1,4 +1,4 @@
-{{ pillar['home'] }}/.vimrc:
+{{ pillar['home'] }}/{{ pillar['user'] }}/.vimrc:
   file:
     - managed
     - user: quanta
