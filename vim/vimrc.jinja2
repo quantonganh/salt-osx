@@ -23,9 +23,15 @@ autocmd FileType rst set syntax=rest
 set nocompatible
 filetype plugin indent on
 
-execute pathogen#infect()
-
-let g:SuperTabDefaultCompletionType = "context"
-let g:jedi#popup_on_dot = 0
-
 set clipboard=unnamed
+execute pathogen#infect()
+let g:SuperTabDefaultCompletionType = "context"
+map <F9> :NERDTreeToggle<CR>
+imap <F9> <ESC>:NERDTreeToggle<CR>
+
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+Bundle 'gmarik/vundle'
