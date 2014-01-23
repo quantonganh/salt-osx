@@ -1,11 +1,16 @@
 set backup
 let day = strftime("%Y-%m-%d")
-let backupdir = $HOME."/.vim/backup/".day
+let user = substitute(system('whoami'), '\n', '', '')
+if user == 'root'
+	let backupdir = "/var/root/.vim/backup/".day
+else
+	let backupdir = $HOME."/.vim/backup/".day
+endif
 silent! let xyz = mkdir(backupdir, "p")
 let cmd = "set backupdir=".backupdir
 execute cmd
 let time = strftime(".%H:%M:%S")
-let cmd = "set backupext=". time
+let cmd = "set backupext=".time
 execute cmd
 
 syntax on
