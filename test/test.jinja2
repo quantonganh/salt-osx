@@ -1,0 +1,6 @@
+{% set project = '/Users/quanta/python' %}
+{% if salt['cmd.run']('ls -l ' ~ project ~ ' | wc -l') == 6 %}
+True    
+{% else %}
+False
+{% endif %}

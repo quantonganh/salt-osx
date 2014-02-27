@@ -1,17 +1,8 @@
-{{ pillar['home']}}/salt.ulimit1:
+/Users/quanta/test:
   file:
     - managed
+    - template: jinja
+    - source: salt://test/test.jinja2
     - user: quanta
     - group: staff
     - mode: 644
-    - template: jinja
-    - source: salt://test/ulimit.jinja2
-
-{{ pillar['home']}}/salt.ulimit2:
-  file:
-    - managed
-    - user: quanta
-    - group: staff
-    - mode: 644
-    - template: jinja
-    - source: salt://test/ulimit.jinja2
