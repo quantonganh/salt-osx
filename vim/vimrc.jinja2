@@ -21,12 +21,10 @@ let g:solarized_visibility = "high"
 let g:solarized_contrast = "high"
 let g:solarized_termtrans = 1
 colorscheme solarized
-set tabstop=4
+
+autocmd FileType python set tabstop=4|set shiftwidth=4|set expandtab
 
 autocmd FileType rst set syntax=rest
-
-set nocompatible
-filetype plugin indent on
 
 set clipboard=unnamed
 execute pathogen#infect()
@@ -40,3 +38,29 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 Bundle 'gmarik/vundle'
+
+Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+let g:Powerline_symbols = 'fancy'
+set laststatus=2
+if has("gui_running")
+   let s:uname = system("uname")
+   if s:uname == "Darwin\n"
+      set guifont=Monaco\ for\ Powerline:h14
+   endif
+endif
+set encoding=utf-8
+
+set nocompatible
+filetype plugin indent on
+autocmd BufRead,BufNewFile *.jinja2 set filetype=sls.jinja2
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+nnoremap <F6> :GundoToggle<CR>
+let g:syntastic_check_on_open=1
+let g:syntastic_python_checkers=['flake8']
+
+let g:UltiSnipsSnippetsDir ="~/.vim/bundle/ultisnips/UltiSnips"
+let g:UltiSnipsListSnippets = "<c-j>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
