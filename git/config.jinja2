@@ -1,0 +1,16 @@
+[user]
+	name = quanta
+	email = tonganhquan.net@gmail.com
+[core]
+	editor = /usr/bin/vim
+{%- if grains['os'] == 'Windows' %}
+	autocrlf = true
+{%- else %}
+	autocrlf = input
+{%- endif %}
+[push]
+	default = matching
+{%- if salt['cmd.run']("git --version | awk '{ print $3 }'") < '1.8.4' %}
+[color]
+	ui = true
+{%- endif %}
