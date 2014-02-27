@@ -6,3 +6,4 @@ mypkgs:
       - ncdu
       - mc
       - plowshare
+      - reattach-to-user-namespace
