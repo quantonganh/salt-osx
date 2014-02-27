@@ -1,0 +1,24 @@
+alias s="sudo salt '*' $1"
+alias ss="sudo salt MacBook-Pro.local state.sls $1 -v"
+alias sc='sudo salt-call $1'
+alias sj='sudo salt-run jobs.active'
+alias sl='sudo salt-run jobs.lookup_jid $1'
+alias sm="sudo salt '*' saltutil.sync_modules"
+alias st="sudo salt '*' saltutil.sync_states"
+alias sp="sudo salt '*' saltutil.refresh_pillar"
+alias sa="sudo salt '*' saltutil.sync_all"
+alias e='exit'
+alias c='clear'
+alias vim='mvim -v'
+alias pwgen='openssl rand -base64 12'
+alias tm='tail -f /var/log/salt/minion | ccze'
+alias lm='less /var/log/salt/minion'
+
+alias g='git'
+complete -o default -o nospace -F _git g
+
+[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ] && . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
+
+[ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh ] && . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
+
+PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
