@@ -4,7 +4,7 @@ include:
 https://github.com/gitlabhq/gitlab-shell.git:
   git:
     - latest
-    - rev: v1.7.9
+    - rev: v1.9.7
     - target: {{ pillar['home'] }}/git/gitlab-shell
     - user: git
     - require:

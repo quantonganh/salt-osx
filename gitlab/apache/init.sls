@@ -1,3 +1,6 @@
+include:
+  - apache
+
 /etc/apache2/other/gitlab.conf:
   file:
     - managed
@@ -6,3 +9,5 @@
     - user: root
     - group: wheel
     - mode: 644
+    - require_in:
+      - module: apache

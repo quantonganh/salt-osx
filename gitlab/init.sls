@@ -1,5 +1,6 @@
 include:
   - git
+  - redis
 
 {%- set home_dir = "{{ pillar['home'] }}/git" %}
 {%- set gitlab_dir = home_dir + "/gitlab" %}
@@ -11,8 +12,8 @@ icu4c:
 https://github.com/gitlabhq/gitlabhq.git:
   git:
     - latest
-    - rev: 6-3-stable
-    - target: {{ pillar['home'] }}/git/gitlab
+    - rev: 7-2-stable
+    - target: /Users/git/gitlab
     - user: git
     - require:
       - file: {{ pillar['home'] }}/git
@@ -89,6 +90,18 @@ charlock_holmes:
     - require:
       - pkg: icu4c
 
+cmake:
+  pkg:
+    - installed
+
+rugged:
+  cmd:
+    - run
+    - name: gem install rugged -v '0.21.0' -V
+    - unless: gem list | grep rugged
+    - require:
+      - pkg: cmake
+
 bundler:
   gem:
     - installed
@@ -97,20 +110,90 @@ bundler:
   cmd:
     - run
     - name: bundle install --deployment --without development test postgres aws --verbose
-    - cwd: {{ gitlab_dir }}
+    - cwd: /Users/git/gitlab
     - require:
       - gem: bundler
+      - cmd: rugged
 
-gitlab:
+{%- for suffix in ('', '.lock') %}
+gitlab_gemfile{{ suffix }}:
+  module:
+    - run
+    - name: file.replace
+    - path: /Users/git/gitlab/Gemfile{{ suffix }}
+    - pattern: "underscore-rails (1.4.4)"
+    - repl: "underscore-rails (1.5.2)"
+{%- endfor %}
+
+gitlab_setup:
   cmd:
     - run
     - name: force=yes bundle exec rake gitlab:setup
     - env:
         RAILS_ENV: production
     - user: git
-    - cwd: {{ gitlab_dir }}
+    - cwd: /Users/git/gitlab
     - require:
       - cmd: bundler
+      - cmd: redis
+      - module: gitlab_gemfile.lock
+      - module: gitlab_gemfile
+
+gitlab_assets_precompile:
+  cmd:
+    - run
+    - cwd: /Users/git/gitlab
+    - name: bundle exec rake assets:precompile RAILS_ENV=production
+    - require:
+      - cmd: gitlab_setup
+
+/Library/LaunchDaemons/gitlab.web.plist:
+  file:
+    - managed
+    - source: https://raw.githubusercontent.com/CiTroNaK/Installation-guide-for-GitLab-on-OS-X/master/gitlab.web.plist
+    - source_hash: md5=d7022c0d483b353c46a7df102982531d
+    - require:
+      - cmd: gitlab_assets_precompile
+
+gitlab_web:
+  module:
+    - run
+    - name: service.start
+    - job_label: gitlab.web
+    - require:
+      - file: /Library/LaunchDaemons/gitlab.web.plist
+
+/Library/LaunchDaemons/gitlab.background_jobs.plist:
+  file:
+    - managed
+    - source: https://raw.githubusercontent.com/CiTroNaK/Installation-guide-for-GitLab-on-OS-X/master/gitlab.background_jobs.plist
+    - source_hash: md5=8d6a387b817aa298648f5b8c1978c5f4
+    - require:
+      - cmd: gitlab_assets_precompile
+
+gitlab_background_jobs:
+  module:
+    - run
+    - name: service.start
+    - job_label: gitlab.background_jobs
+    - require:
+      - file: /Library/LaunchDaemons/gitlab.background_jobs.plist
+
+/Library/LaunchDaemons/gitlab.backup.plist:
+  file:
+    - managed
+    - source: https://raw.githubusercontent.com/CiTroNaK/Installation-guide-for-GitLab-on-OS-X/master/gitlab.backup.plist
+    - source_hash: md5=07259e5db154f0f4396e67b955583468
+    - require:
+      - cmd: gitlab_assets_precompile
+
+gitlab_backup:
+  module:
+    - run
+    - name: service.start
+    - job_label: gitlab.backup
+    - require:
+      - file: /Library/LaunchDaemons/gitlab.backup.plist
 
 /etc/init.d:
   file:
@@ -123,7 +206,23 @@ gitlab:
   file:
     - managed
     - template: jinja
-    - source: salt://gitlab/gitlab.init.jinja2
+    - source: salt://gitlab/gitlab_init.jinja2
     - user: root
     - group: wheel
     - mode: 755
+    - require:
+      - file: /etc/init.d
+
+gitlab_start:
+  cmd:
+    - run
+    - name: /etc/init.d/gitlab start
+    - require:
+      - file: /etc/init.d/gitlab
+
+gitlab_hostname:
+  module:
+    - run
+    - name: hosts.add_host
+    - ip: {{ salt['pillar.get']('gitlab:address', '127.0.0.1') }}
+    - alias: {{ pillar['gitlab']['url'] }}
