@@ -10,6 +10,18 @@ git:
     - createhome: False
     - requite:
       - group: git
+  cmd:
+    - run
+    - name: defaults write /Library/Preferences/com.apple.loginwindow HiddenUsersList -array-add git
+    - unless: defaults read /Library/Preferences/com.apple.loginwindow HiddenUsersList | grep git
+    - require:
+      - user: git
+
+git_hide:
+  cmd:
+    - run
+    - name: defaults write /Library/Preferences/com.apple.loginwindow SHOWOTHERUSERS_MANAGED -bool FALSE
+    - onlyif: defaults read /Library/Preferences/com.apple.loginwindow | grep '"SHOWOTHERUSERS_MANAGED" = 1'
 
 {{ pillar['home'] }}/git:
   file:
