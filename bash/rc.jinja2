@@ -16,6 +16,7 @@ alias lm='less /var/log/salt/minion'
 
 alias g='git'
 complete -o default -o nospace -F _git g
+complete -o default -o nospace -W "$(awk '/Host / { print $2 }' ~/.ssh/config)" ssh scp
 
 [ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ] && . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
 
