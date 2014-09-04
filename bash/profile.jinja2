@@ -1,8 +1,12 @@
 [ -f ~/.bashrc ] && . ~/.bashrc
 export CLICOLOR=1
-export PROMPT_COMMAND='echo -ne "\033]0;${PWD/#$HOME/~}\007"'
+export PROMPT_COMMAND='echo -ne "\033]0;$(basename "$(dirname "$PWD")")/${PWD##*/}\007"'
 export SSL_CERT_FILE=/usr/local/opt/curl-ca-bundle/share/ca-bundle.crt
 bind "set completion-ignore-case on"
 bind 'set mark-symlinked-directories on'
 export PATH=/usr/local/sbin:$PATH
 export DOCKER_HOST=localhost
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
