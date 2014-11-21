@@ -110,7 +110,7 @@ bundler:
   cmd:
     - run
     - name: bundle install --deployment --without development test postgres aws --verbose
-    - cwd: /Users/git/gitlab
+    - cwd: {{ salt['user.info']('git')['home'] }}/gitlab
     - require:
       - gem: bundler
       - cmd: rugged
@@ -219,6 +219,16 @@ gitlab_start:
     - name: /etc/init.d/gitlab start
     - require:
       - file: /etc/init.d/gitlab
+
+gitlab_plist:
+  file:
+    - managed
+    - name: /Library/LaunchDaemons/com.gitlab.gitlab.plist
+    - template: jinja
+    - source: salt://gitlab/plist.jinja2
+    - user: root
+    - group: wheel
+    - mode: 644
 
 gitlab_hostname:
   module:
