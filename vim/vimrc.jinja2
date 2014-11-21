@@ -64,3 +64,8 @@ let g:UltiSnipsListSnippets = "<c-j>"
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+au BufNewFile *.jinja2 so ~/.vim/header/jinja_header.txt
+au BufNewFile *.py so ~/.vim/header/py_header.txt
+au BufNewFile *.rst so ~/.vim/header/rst_header.txt
+au BufNewFile *.sls so ~/.vim/header/sls_header.txt
