@@ -1,4 +1,4 @@
-alias s="sudo salt '*' $1"
+alias s="sudo salt-call --local state.sls $1 -l debug"
 alias ss="sudo salt MacBook-Pro.local state.sls $1 -v"
 alias sc='sudo salt-call $1'
 alias sj='sudo salt-run jobs.active'
@@ -7,6 +7,8 @@ alias sm="sudo salt '*' saltutil.sync_modules"
 alias st="sudo salt '*' saltutil.sync_states"
 alias sp="sudo salt '*' saltutil.refresh_pillar"
 alias sa="sudo salt '*' saltutil.sync_all"
+alias u="sudo salt -t 600 integration-u state.sls $1 -l debug"
+alias ut="sudo salt -t 60 integration-u test.ping"
 alias e='exit'
 alias c='clear'
 alias vim='mvim -v'
