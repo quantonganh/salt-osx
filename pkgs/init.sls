@@ -15,6 +15,7 @@ mypkgs:
       - pv
       - reattach-to-user-namespace
       - s3cmd
+      - tig
       - tmux
       - tree
       - xz
