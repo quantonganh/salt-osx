@@ -6,6 +6,7 @@ mypkgs:
       - bash-completion
       - gpg
       - htop-osx
+      - lsyncd
       - macvim
       - mc
       - mysql
