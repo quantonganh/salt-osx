@@ -1,0 +1,10 @@
+mydomain_fallback = localhost
+mail_owner = _postfix
+setgid_group = _postdrop
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_use_tls = yes
+# OS X Yosemite fix
+smtp_sasl_mechanism_filter = plain
