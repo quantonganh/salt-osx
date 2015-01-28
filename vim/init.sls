@@ -8,5 +8,5 @@
     - group: staff
     - mode: 644
     - template: jinja
-    - source: salt://vim/vimrc.jinja2
+    - source: salt://vim/rc.jinja2
     - backup: minion
