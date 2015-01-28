@@ -1,5 +1,5 @@
-brew-update:
+brew_install:
   cmd:
     - run
-    - name: brew update
-    - unless: brew doctor
+    - name: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    - unless: test -x /usr/local/bin/brew
