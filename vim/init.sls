@@ -4,7 +4,7 @@
 {{ home }}/.vimrc:
   file:
     - managed
-    - user: quanta
+    - user: {{ user }}
     - group: staff
     - mode: 644
     - template: jinja
