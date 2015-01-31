@@ -1,20 +1,28 @@
+{%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
+{%- set home = salt['user.info'](user)['home'] %}
+{%- set file_roots = salt['pillar.get']('master:file_roots:base')[0] %}
+
 include:
   - vim.pathogen
 
 https://github.com/kien/ctrlp.vim.git:
   git:
     - latest
-    - target: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/ctrlp.vim
-    - user: {{ pillar['user'] }}
-    - unless: test -d {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/ctrlp.vim
+    - target: {{ home }}/.vim/bundle/ctrlp.vim
+    - user: {{ user }}
+    - unless: test -d {{ home }}/.vim/bundle/ctrlp.vim
 
-{% for file in ('~/.vimrc', '/srv/salt/vim/vimrc.jinja2') %}
+{% for file in ('~/.vimrc', file_roots ~ '/vim/rc.jinja2') %}
 {{ file }}:
-  cmd:
-    - run
-    - name: echo 'set runtimepath^=~/.vim/bundle/ctrlp.vim' >> {{ file }}
-    - user: {{ pillar['user'] }}
-    - unless: grep ctrlp {{ file }}
+  file:
+    - append
+    - text: |
+        set runtimepath^=~/.vim/bundle/ctrlp.vim
+        let g:ctrlp_map = '<leader>f'
+        let g:ctrlp_prompt_mappings = {
+            \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
+            \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
+            \ }
     - require:
       - git: https://github.com/kien/ctrlp.vim.git
 {% endfor %}

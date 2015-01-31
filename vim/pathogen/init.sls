@@ -1,3 +1,6 @@
+include:
+  - vim
+
 {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/autoload:
   file:
     - directory

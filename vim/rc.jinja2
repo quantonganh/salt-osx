@@ -54,7 +54,6 @@ set nocompatible
 filetype plugin indent on
 autocmd BufRead,BufNewFile *.jinja2 set filetype=sls.jinja2
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim
 nnoremap <F6> :GundoToggle<CR>
 let g:syntastic_check_on_open=1
 let g:syntastic_python_checkers=['flake8']
@@ -69,7 +68,6 @@ au BufNewFile *.jinja2 so ~/.vim/header/jinja_header.txt
 au BufNewFile *.py so ~/.vim/header/py_header.txt
 au BufNewFile *.sls so ~/.vim/header/sls_header.txt
 
-autocmd VimEnter * NERDTree
-autocmd VimEnter * wincmd p
-autocmd BufEnter * NERDTreeMirror
-autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+let mapleader = ","
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_map = '<leader>f'
