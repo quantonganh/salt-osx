@@ -5,24 +5,27 @@
 include:
   - vim.pathogen
 
-https://github.com/kien/ctrlp.vim.git:
+vim_ctrlp:
   git:
     - latest
+    - name: https://github.com/kien/ctrlp.vim.git
     - target: {{ home }}/.vim/bundle/ctrlp.vim
     - user: {{ user }}
     - unless: test -d {{ home }}/.vim/bundle/ctrlp.vim
-
-{% for file in ('~/.vimrc', file_roots ~ '/vim/rc.jinja2') %}
-{{ file }}:
   file:
     - append
+    - name: {{ home }}/.vimrc
     - text: |
+
+        " ctrp
         set runtimepath^=~/.vim/bundle/ctrlp.vim
         let g:ctrlp_map = '<leader>f'
         let g:ctrlp_prompt_mappings = {
             \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
             \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
             \ }
+        " end of ctrlp
     - require:
-      - git: https://github.com/kien/ctrlp.vim.git
-{% endfor %}
+      - git: vim_ctrlp
+    - watch_in:
+      - cmd: vimrc
