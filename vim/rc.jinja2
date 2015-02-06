@@ -39,16 +39,9 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-let g:Powerline_symbols = 'fancy'
-set laststatus=2
-if has("gui_running")
-   let s:uname = system("uname")
-   if s:uname == "Darwin\n"
-      set guifont=Monaco\ for\ Powerline:h14
-   endif
-endif
-set encoding=utf-8
+" powerline
+
+" end of powerline
 
 set nocompatible
 filetype plugin indent on
@@ -71,3 +64,10 @@ au BufNewFile *.sls so ~/.vim/header/sls_header.txt
 let mapleader = ","
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 let g:ctrlp_map = '<leader>f'
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
+    \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
+    \ }
+" airline
+set laststatus=2
+" end of airline
