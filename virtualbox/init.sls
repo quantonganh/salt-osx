@@ -1,7 +1,7 @@
 {%- set user = salt['cmd.run']('stat -f %Su /dev/console') %}
 {%- set home = salt['user.info'](user)['home'] %}
-{%- set main_version = '4.3.20' %}
-{%- set sub_version = '96996' %}
+{%- set main_version = '4.3.22' %}
+{%- set sub_version = '98236' %}
 {%- set version = main_version + '-' + sub_version %}
 
 virtualbox_download:
@@ -22,6 +22,22 @@ virtualbox_mount:
     - require:
       - cmd: virtualbox_download
 
+virtualbox_shutdown_runningvms:
+  cmd:
+    - run
+    - name: VBoxManage list runningvms | awk -F '[{}]' '{ print $2 }' | xargs -L1 -I {} VBoxManage controlvm {} poweroff
+    - user: {{ user }}
+    - onlyif: VBoxManage -v
+
+virtualbox_kill_processes:
+  cmd:
+    - run
+    - name: |
+        pkill VBoxXPCOMIPCD
+        pkill VBoxSVC
+    - require:
+      - cmd: virtualbox_shutdown_runningvms
+
 {%- if salt['cmd.run']('VBoxManage -v') not in ('', main_version + 'r' + sub_version) %}
 virtualbox_install:
   cmd:
@@ -31,6 +47,7 @@ virtualbox_install:
     - user: {{ user }}
     - require:
       - cmd: virtualbox_mount
+      - cmd: virtualbox_kill_processes
 {%- endif %}
 
 virtualbox_unmount:
