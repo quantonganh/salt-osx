@@ -1,0 +1,32 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Sorin Ionescu <sorin.ionescu@gmail.com>
+#
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Customize to your needs...
+alias vim='mvim -v'
+alias s="sudo salt-call --local state.sls $1 -l debug"
+alias vlc="/Applications/VLC.app/Contents/MacOS/VLC"
+unsetopt HIST_VERIFY
+alias vu="vagrant up $1"
+alias vs="vagrant ssh $1"
+alias vr="vagrant reload $1"
+alias vh="vagrant halt $1"
+
+# COMPLETION SETTINGS
+# add custom completion scripts
+fpath=(~/.zsh/completion $fpath)
+
+# compsys initialization
+autoload -U compinit
+compinit
+
+# show completion menu when number of options is at least 2
+zstyle ':completion:*' menu select=2
