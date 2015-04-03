@@ -1,13 +1,16 @@
 {%- set user = salt['cmd.run']('stat -f ''%Su'' /dev/console') %}
+{%- set home = salt['user.info'](user)['home'] %}
 
-include:
-  - bash.completion
-
-/usr/local/etc/bash_completion.d/docker:
+docker_zsh_completion:
   file:
-    - managed
-    - source: https://raw.githubusercontent.com/docker/docker/master/contrib/completion/bash/docker
-    - source_hash: md5=58e6ada24366ed032b600a9bdf6b08a7
+    - directory
+    - name: {{ home }}/.zsh/completion
     - user: {{ user }}
-    - group: admin
-    - mode: 400
+    - group: staff
+    - mode: 755
+    - makedirs: True
+  cmd:
+    - wait
+    - name: curl -L https://raw.githubusercontent.com/docker/docker/master/contrib/completion/zsh/_docker > {{ home }}/.zsh/completion/_docker
+    - watch:
+      - file: docker_zsh_completion
