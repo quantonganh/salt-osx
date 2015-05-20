@@ -82,7 +82,7 @@ def extracted(name,
         if __opts__['test']:
             ret['result'] = None
             ret['comment'] = \
-                'Archive {0} would have been downloaded in cache'.format(source,
+                'Archive {0} named {1} would have been downloaded in cache'.format(source,
                                                                          name)
             return ret
 
