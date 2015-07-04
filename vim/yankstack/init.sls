@@ -6,7 +6,6 @@ https://github.com/maxbrunsfeld/vim-yankstack:
     - latest
     - target: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/vim-yankstack
     - user: {{ pillar['user'] }}
-    - unless: test -d {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/vim-yankstack
 
 {% for file in ('~/.vimrc', '/srv/salt/vim/vimrc.jinja2') %}
 {{ file }}:
