@@ -5,12 +5,20 @@
 include:
   - vim.pathogen
 
-https://github.com/SirVer/ultisnips.git:
+vim_ultisnips:
+  cmd:
+    - run
+    - cwd: {{ home }}/.vim/bundle/ultisnips
+    - name: |
+        git fetch origin master
+        git reset --hard FETCH_HEAD
   git:
     - latest
+    - name: https://github.com/SirVer/ultisnips.git
     - target: {{ home }}/.vim/bundle/ultisnips
     - user: {{ user }}
-    - unless: test -d {{ home }}/.vim/bundle/ultisnips
+    - require:
+      - cmd: vim_ultisnips
 
 {% for file in ('~/.vimrc', file_roots ~ '/vim/rc.jinja2') %}
 {{ file }}:
@@ -23,7 +31,7 @@ https://github.com/SirVer/ultisnips.git:
         let g:UltiSnipsJumpForwardTrigger="<tab>"
         let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
     - require:
-      - git: https://github.com/SirVer/ultisnips.git
+      - git: vim_ultisnips
 {% endfor %}
 
 {{ home }}/.vim/bundle/ultisnips/UltiSnips/jinja2.snippets:
@@ -34,4 +42,4 @@ https://github.com/SirVer/ultisnips.git:
     - group: staff
     - mode: 600
     - require:
-      - git: https://github.com/SirVer/ultisnips.git
+      - git: vim_ultisnips
