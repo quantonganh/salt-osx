@@ -72,6 +72,10 @@ let g:ctrlp_prompt_mappings = {
 set laststatus=2
 " end of airline
 
+" highlight excess line length (79)
+autocmd Filetype py rst textwidth=79
+set colorcolumn=+1
+
 " go
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
