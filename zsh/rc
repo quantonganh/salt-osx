@@ -33,3 +33,6 @@ zstyle ':completion:*' menu select=2
 
 # disable history verify
 unsetopt histverify
+
+# disable shared history between tabs
+unsetopt share_history
