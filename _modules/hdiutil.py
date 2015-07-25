@@ -49,7 +49,7 @@ def mount(name, user=None):
     return True
 
 
-def umount(name, user=None):
+def unmount(name, user=None):
     '''
     Attempt to unmount a mounted volume
 
@@ -57,7 +57,7 @@ def umount(name, user=None):
 
     .. code-block:: bash
 
-        salt '*' hdiutil.umount /mnt/foo
+        salt '*' hdiutil.unmount /mnt/foo
     '''
     cmd = 'hdiutil unmount {0}'.format(name)
     out = __salt__['cmd.run_all'](cmd, runas=user)
