@@ -1,40 +1,32 @@
-{%- set home = salt['user.info'](user)['home'] %}
-{%- set user = salt['cmd.run']('stat -f %Su /dev/console') %}
-{%- set version = '2.1.5' %}
+{%- from "macros.jinja2" import user with context %}
 
-vlc_download:
-  cmd:
-    - run
-    - cwd: {{ home }}/Downloads
-    - name: wget 'http://get.videolan.org/vlc/2.1.5/macosx/vlc-{{ version }}.dmg'
-    - user: {{ user }}
-    - unless: test -f {{ home }}/Downloads/vlc-{{ version }}.dmg
+{%- set version = '2.2.1' %}
 
-vlc_mount:
+vlc:
+  file:
+    - managed
+    - name: {{ user.downloads }}/vlc-{{ version }}.dmg
+    - source: http://get.videolan.org/vlc/{{ version }}/macosx/vlc-{{ version }}.dmg
+    - source_hash: sha1=ac20bcdeb18fd21627fd2b08e7bcf295258ad513
+    - user: {{ user.owner }}
+  hdiutil:
+    - mounted
+    - name: {{ user.downloads }}/vlc-{{ version }}.dmg
+    - user: {{ user.owner }}
+    - unless: grep {{ version }} /Applications/VLC.app/Contents/Info.plist
+    - watch:
+      - file: vlc
   cmd:
-    - run
-    - cwd: {{ home }}/Downloads
-    - name: hdiutil mount vlc-{{ version }}.dmg
-    - user: {{ user }}
-    - unless: test -d /Volumes/vlc-{{ version }}/
-    - require:
-      - cmd: vlc_download
-
-vlc_install:
-  cmd:
-    - run
+    - wait
     - cwd: /Volumes/vlc-{{ version }}/
-    - name: cp -r VLC.app /Applications/
-    - user: {{ user }}
-    - unless: test -d /Applications/VLC.app
-    - require:
-      - cmd: vlc_mount
-
-vlc_unmount:
-  cmd:
-    - run
-    - name: hdiutil unmount /Volumes/vlc-{{ version }}/
-    - user: {{ user }}
-    - onlyif: test -d /Volumes/vlc-{{ version }}/
-    - require:
-      - cmd: vlc_install
+    - name: rsync -a --delete VLC.app/ /Applications/VLC.app/
+    - user: {{ user.owner }}
+    - watch:
+      - hdiutil: vlc
+  module:
+    - wait
+    - name: hdiutil.unmount
+    - m_name: /Volumes/vlc-{{ version }}/
+    - user: {{ user.owner }}
+    - watch:
+      - cmd: vlc
