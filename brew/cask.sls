@@ -9,4 +9,4 @@ brew-cask:
     - name: brew install caskroom/cask/brew-cask
     - user: {{ user }}
     - watch:
-      - cmd: brew_install
+      - cmd: brew
