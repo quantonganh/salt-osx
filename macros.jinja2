@@ -1,0 +1,9 @@
+{%- set owner = salt['cmd.run']('stat -f "%Su" /dev/console') %}
+{%- set home = salt['user.info'](owner)['home'] %}
+{%- set downloads = home + '/Downloads' %}
+
+{%- set user = {
+    'owner': owner,
+    'home': home,
+    'downloads': downloads,
+} %}
