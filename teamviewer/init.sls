@@ -1,41 +1,10 @@
-{%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
-{%- set home = salt['user.info'](user)['home'] %}
-{%- set main_version = '10.0' %}
-{%- set sub_version = '36341' %}
-{%- set version = main_version + '.' + sub_version %}
+{%- from "macros.jinja2" import dmg_install with context %}
 
-teamviewer_download:
-  cmd:
-    - run
-    - cwd: {{ home }}/Downloads
-    - name: wget 'http://download.teamviewer.com/download/TeamViewer.dmg' -O TeamViewer-{{ version }}.dmg
-    - user: {{ user }}
-    - unless: test -f /Users/{{ user }}/Downloads/TeamViewer-{{ version }}.dmg
+{%- set version = '10.0.43320' %}
 
-teamviewer_mount:
-  cmd:
-    - run
-    - cwd: /Users/{{ user }}/Downloads
-    - name: hdiutil mount TeamViewer-{{ version }}.dmg
-    - user: {{ user }}
-    - unless: grep {{ version }} /Applications/TeamViewer.app/Contents/Info.plist
-    - require:
-      - cmd: teamviewer_download
-
-teamviewer_install:
-  cmd:
-    - run
-    - name: sudo installer -verbose -pkg /Volumes/TeamViewer/Install\ TeamViewer.pkg -target /
-    - user: {{ user }}
-    - unless: grep {{ version }} /Applications/TeamViewer.app/Contents/Info.plist
-    - require:
-      - cmd: teamviewer_mount
-
-teamviewer_unmount:
-  cmd:
-    - run
-    - name: hdiutil unmount /Volumes/TeamViewer
-    - user: {{ user }}
-    - onlyif: test -d /Volumes/TeamViewer
-    - require:
-      - cmd: teamviewer_install
+{{ dmg_install('teamviewer',
+               filename='TeamViewer',
+               version=version,
+               source='http://download.teamviewer.com/download/TeamViewer.dmg',
+               source_hash='md5=02c16506a4b9ba4af9173167e5bc1215',
+               pkg=True) }}
