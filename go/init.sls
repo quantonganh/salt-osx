@@ -8,7 +8,7 @@ go:
   pkg:
     - installed
     - require:
-      - cmd: brew_install
+      - cmd: brew
   environ:
     - setenv
     - name: GOPATH
