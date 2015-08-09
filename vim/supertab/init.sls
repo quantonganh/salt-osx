@@ -1,20 +1,23 @@
+{%- from "macros.jinja2" import user with context %}
+
 include:
   - vim.pathogen
 
-https://github.com/ervandew/supertab.git:
+vim_supertab:
   git:
     - latest
-    - target: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/supertab
-    - user: {{ pillar['user'] }}
-    - unless: test -d {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/supertab
-
-{% for file in ('~/.vimrc', '/srv/salt/vim/vimrc.jinja2') %}
-{{ file }}:
-  cmd:
-    - run
-    - name: echo 'let g:SuperTabDefaultCompletionType = "context"' >> {{ file }}
-    - user: {{ pillar['user'] }}
-    - unless: grep SuperTabDefaultCompletionType {{ file }}
-    - require:
-      - git: https://github.com/ervandew/supertab.git
-{% endfor %}
+    - name: https://github.com/ervandew/supertab.git
+    - target: {{ user.home }}/.vim/bundle/supertab
+    - user: {{ user.owner }}
+    - unless: test -d {{ user.home }}/.vim/bundle/supertab
+  file:
+    - accumulated
+    - name: plugins
+    - filename: {{ user.home }}/.vimrc
+    - require_in:
+      - git: vim_supertab
+      - file: vimrc
+    - text: |
+        " supertab
+        let g:SuperTabDefaultCompletionType = "context"
+        " end of supertab

@@ -1,20 +1,24 @@
+{%- from "macros.jinja2" import user with context %}
+
 include:
   - vim.pathogen
 
-https://github.com/scrooloose/syntastic.git:
+vim_syntastic:
   git:
     - latest
-    - target: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/syntastic
-    - user: {{ pillar['user'] }}
-    - unless: test -d {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/syntastic
-
-{% for file in ('~/.vimrc', '/srv/salt/vim/vimrc.jinja2') %}
-{{ file }}:
-  cmd:
-    - run
-    - name: echo "let g:syntastic_check_on_open=1\nlet g:syntastic_python_checkers=['flake8']\n" >> {{ file }}
-    - user: {{ pillar['user'] }}
-    - unless: grep syntastic {{ file }}
-    - require:
-      - git: https://github.com/scrooloose/syntastic.git
-{% endfor %}
+    - name: https://github.com/scrooloose/syntastic.git
+    - target: {{ user.home }}/.vim/bundle/syntastic
+    - user: {{ user.owner }}
+    - unless: test -d {{ user.home }}/.vim/bundle/syntastic
+  file:
+    - accumulated
+    - name: plugins
+    - filename: {{ user.home }}/.vimrc
+    - require_in:
+      - file: vimrc
+      - git: vim_syntastic
+    - text: |
+        " syntastic
+        let g:syntastic_check_on_open=1
+        let g:syntastic_python_checkers=['flake8']
+        " end of syntastic

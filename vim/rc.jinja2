@@ -87,3 +87,9 @@ let g:neocomplete#enable_at_startup = 1
 " disable folding
 set nofoldenable
 " end of disable folding
+
+{%- if accumulator|default(False) %}
+  {%- for line in accumulator['plugins'] %}
+{{ line }}
+  {%- endfor %}
+{%- endif %}
