@@ -1,5 +1,5 @@
-{%- set home = salt['user.info'](user)['home'] %}
 {%- set user = salt['cmd.run']('stat -f %Su /dev/console') %}
+{%- set home = salt['user.info'](user)['home'] %}
 {%- set version = '1.6.6' %}
 
 soundflower_mount:

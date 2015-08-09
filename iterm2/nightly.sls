@@ -2,7 +2,7 @@
 {%- set home = salt['user.info'](user)['home'] %}
 {%- set version = '2_9_20150715' %}
 
-iterm2:
+iterm2_nightly:
   archive:
     - extracted
     - name: {{ home }}/Downloads

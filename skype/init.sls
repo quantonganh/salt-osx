@@ -1,5 +1,5 @@
-{%- set home = salt['user.info'](user)['home'] %}
 {%- set user = salt['cmd.run']('stat -f %Su /dev/console') %}
+{%- set home = salt['user.info'](user)['home'] %}
 {%- set version = '6.19.0.442' %}
 
 skype_download:

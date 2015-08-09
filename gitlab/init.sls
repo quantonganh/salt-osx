@@ -102,7 +102,7 @@ rugged:
     - require:
       - pkg: cmake
 
-bundler:
+gitlab_bundler:
   gem:
     - installed
     - require:
@@ -112,7 +112,7 @@ bundler:
     - name: bundle install --deployment --without development test postgres aws --verbose
     - cwd: {{ salt['user.info']('git')['home'] }}/gitlab
     - require:
-      - gem: bundler
+      - gem: gitlab_bundler
       - cmd: rugged
 
 {%- for suffix in ('', '.lock') %}
@@ -134,7 +134,7 @@ gitlab_setup:
     - user: git
     - cwd: /Users/git/gitlab
     - require:
-      - cmd: bundler
+      - cmd: gitlab_bundler
       - cmd: redis
       - module: gitlab_gemfile.lock
       - module: gitlab_gemfile
