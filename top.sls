@@ -3,7 +3,7 @@
 base:
   '*':
   {%- for state in states %}
-    {%- if not state.endswith('.absent')  %}
+    {%- if not state.endswith('.absent') %}
     - {{ state }}
     {%- endif %}
   {%- endfor %}
