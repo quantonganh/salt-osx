@@ -93,3 +93,11 @@ set nofoldenable
 {{ line }}
   {%- endfor %}
 {%- endif %}
+
+" vim-plug
+call plug#begin('~/.vim/bundle')
+{%- for plug in salt['pillar.get']('vim:plugins') %}
+Plug {{ plug }}
+{%- endfor %}
+call plug#end()
+" end of vim-plug
