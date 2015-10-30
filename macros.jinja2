@@ -1,12 +1,6 @@
-{%- set owner = salt['cmd.run']('stat -f "%Su" /dev/console') %}
-{%- set home = salt['user.info'](owner)['home'] %}
+{%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
+{%- set home = salt['user.info'](user)['home'] %}
 {%- set downloads = home + '/Downloads' %}
-
-{%- set user = {
-    'owner': owner,
-    'home': home,
-    'downloads': downloads,
-} %}
 
 {%- macro dmg_install(name, version, source, source_hash, filename=None, volume=None, app_name=None, pkg=False) %}
   {%- if not filename -%}
@@ -22,7 +16,6 @@
 {{ name }}:
   file:
     - managed
-    - name: {{ user.downloads }}/{{ filename }}-{{ version }}.dmg
     - source: {{ source }}
     - source_hash: {{ source_hash }}
     - user: {{ user.owner }}
