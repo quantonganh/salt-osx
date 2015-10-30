@@ -1,13 +1,13 @@
 {%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
 {%- set home = salt['user.info'](user)['home'] %}
-{%- set version = 'v2_0' %}
+{%- set version = '2_1_4' %}
 
 iterm2:
   archive:
     - extracted
     - name: {{ home }}/Downloads/
-    - source: https://iterm2.com/downloads/stable/iTerm2_{{ version }}.zip
-    - source_hash: md5=002b02ced93c36707bda3b5816fba345
+    - source: https://iterm2.com/downloads/stable/iTerm2-{{ version }}.zip
+    - source_hash: md5=07c275cb78ef2d42bc335e20d1f95d16
     - archive_format: zip
     - if_missing: {{ home }}/Downloads/iTerm.app/
   file:
@@ -16,13 +16,11 @@ iterm2:
     - owner: {{ user }}
     - require:
       - archive: iterm2
-
-iterm2_install:
   cmd:
     - run
     - cwd: {{ home }}/Downloads/
-    - name: cp -r iTerm.app /Applications/
+    - name: rsync -av --delete iTerm.app/ /Applications/iTerm.app/
     - user: {{ user }}
-    - unless: test -d /Applications/iTerm.app/
+    - unless: grep -A1 CFBundleVersion /Applications/iTerm.app/Contents/Info.plist | grep {{ version }}
     - require:
       - file: iterm2
