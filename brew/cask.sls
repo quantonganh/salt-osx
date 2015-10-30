@@ -9,7 +9,8 @@ brew-cask:
     - run
     - name: brew install caskroom/cask/brew-cask
     - user: {{ user }}
-    - unless: brew list | grep brew-cask || brew-cask --version != {{ version }}
+    - unless: brew list | grep brew-cask
+    - onlyif: brew-cask --version != {{ version }}
     - require:
       - cmd: brew
 {%- if salt['cmd.run']('brew-cask --version') != version %}
