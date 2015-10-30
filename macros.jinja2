@@ -4,26 +4,31 @@
 
 {%- macro dmg_install(name, version, source, source_hash, filename=None, volume=None, app_name=None, pkg=False) %}
   {%- if not filename -%}
-    {%- set filename = name -%}
+    {%- set filename = name + '-' + version -%}
   {%- endif -%}
   {%- if not volume -%}
-    {%- set volume = filename -%}
+    {%- set volume = name|capitalize -%}
   {%- endif -%}
   {%- if not app_name -%}
-    {%- set app_name = filename + '.app' -%}
+    {%- set app_name = volume + '.app' -%}
   {%- endif %}
 
 {{ name }}:
   file:
     - managed
+    - name: {{ user.downloads }}/{{ filename }}.dmg
     - source: {{ source }}
     - source_hash: {{ source_hash }}
     - user: {{ user.owner }}
   hdiutil:
     - mounted
-    - name: {{ user.downloads }}/{{ filename }}-{{ version }}.dmg
+    - name: {{ user.downloads }}/{{ filename }}.dmg
     - user: {{ user.owner }}
+  {%- if pkg %}
+    - unless: pkgutil --pkgs | grep {{ name }}
+  {%- else %}
     - unless: grep {{ version }} /Applications/{{ app_name }}/Contents/Info.plist
+  {%- endif %}
     - require:
       - file: {{ name }}
   cmd:
