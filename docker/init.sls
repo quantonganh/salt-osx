@@ -14,7 +14,7 @@ boot2docker:
     - require:
       - cmd: brew
 {%- if version not in salt['cmd.run']('boot2docker version') %}
-      - file boot2docker_absent_old_version
+      - file: boot2docker_absent_old_version
 
 boot2docker_stop:
   cmd:
