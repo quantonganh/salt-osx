@@ -6,4 +6,4 @@ hostmanager_install:
     - run
     - name: vagrant plugin install vagrant-hostmanager
     - require:
-      - cmd: vagrant_install
+      - cmd: vagrant

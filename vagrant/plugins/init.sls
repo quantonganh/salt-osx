@@ -9,4 +9,4 @@ vagrant_plugins:
     - name: vagrant plugin install {% for plugin in salt['pillar.get']('vagrant:plugins', []) %}{{ plugin }}{% if not loop.last %} {% endif %}{% endfor %}
     - user: {{ user }}
     - require:
-      - cmd: vagrant_install
+      - cmd: vagrant

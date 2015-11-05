@@ -9,4 +9,4 @@ vbox_snapshot_install:
     - name: vagrant plugin install vagrant-vbox-snapshot
     - user: {{ user }}
     - require:
-      - cmd: vagrant_install
+      - cmd: vagrant
