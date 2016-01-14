@@ -1,40 +1,8 @@
-{%- set user = salt['cmd.run']('stat -f %Su /dev/console') %}
-{%- set home = salt['user.info'](user)['home'] %}
-{%- set version = '0.4.3' %}
+{%- from "macros.jinja2" import dmg_install with context %}
 
-keepassx_download:
-  cmd:
-    - run
-    - cwd: {{ home }}/Downloads
-    - name: wget 'http://www.keepassx.org/releases/KeePassX-{{ version }}.dmg'
-    - user: {{ user }}
-    - unless: test -f {{ home }}/Downloads/KeePassX-{{ version }}.dmg
+{%- set version = '2.0' %}
 
-keepassx_mount:
-  cmd:
-    - run
-    - cwd: {{ home }}/Downloads
-    - name: hdiutil mount KeePassX-{{ version }}.dmg
-    - user: {{ user }}
-    - unless: test -d /Volumes/KeePassX-{{ version }}/
-    - require:
-      - cmd: keepassx_download
-
-keepassx_install:
-  cmd:
-    - run
-    - cwd: /Volumes/KeePassX-{{ version }}/
-    - name: mv KeePassX.app /Applications/
-    - user: {{ user }}
-    - unless: test -d /Applications/KeePassX.app
-    - require:
-      - cmd: keepassx_mount
-
-keepassx_unmount:
-  cmd:
-    - run
-    - name: hdiutil unmount /Volumes/KeePassX-{{ version }}/
-    - user: {{ user }}
-    - onlyif: test -d /Volumes/KeePassX-{{ version }}/
-    - require:
-      - cmd: keepassx_install
+{{ dmg_install('KeePassX',
+               version=version,
+               source='https://www.keepassx.org/releases/2.0/KeePassX-2.0.dmg',
+               source_hash='md5=f5eb7bd72bf97dc8b08308f87cdf1470') }}
