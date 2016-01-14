@@ -16,14 +16,14 @@
 {{ name }}:
   file:
     - managed
-    - name: {{ user.downloads }}/{{ filename }}.dmg
+    - name: {{ downloads }}/{{ filename }}.dmg
     - source: {{ source }}
     - source_hash: {{ source_hash }}
-    - user: {{ user.owner }}
+    - user: {{ user }}
   hdiutil:
     - mounted
-    - name: {{ user.downloads }}/{{ filename }}.dmg
-    - user: {{ user.owner }}
+    - name: {{ downloads }}/{{ filename }}.dmg
+    - user: {{ user }}
   {%- if pkg %}
     - unless: pkgutil --pkgs | grep {{ name }}
   {%- else %}
@@ -39,14 +39,14 @@
   {%- else %}
     - name: rsync -a --delete {{ app_name }}/ /Applications/{{ app_name }}/
   {%- endif %}
-    - user: {{ user.owner }}
+    - user: {{ user }}
     - watch:
       - hdiutil: {{ name }}
   module:
     - wait
     - name: hdiutil.unmount
     - m_name: /Volumes/{{ volume }}/
-    - user: {{ user.owner }}
+    - user: {{ user }}
     - watch:
       - cmd: {{ name }}
 {%- endmacro %}
