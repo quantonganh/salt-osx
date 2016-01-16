@@ -1,0 +1,29 @@
+[program:sentry-web]
+directory=/usr/local/sentry/
+user: quanta
+command=/usr/local/sentry/bin/sentry start
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/usr/local/var/log/sentry.log
+stderr_logfile=/usr/local/var/log/sentry.log
+
+[program:sentry-worker]
+directory=/usr/local/sentry/
+user: quanta
+command=/usr/local/sentry/bin/sentry celery worker
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/usr/local/var/log/sentry.log
+stderr_logfile=/usr/local/var/log/sentry.log
+
+[program:sentry-cron]
+directory=/usr/local/sentry/
+user: quanta
+command=/usr/local/sentry/bin/sentry celery beat
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/usr/local/var/log/sentry.log
+stderr_logfile=/usr/local/var/log/sentry.log

@@ -1,0 +1,9 @@
+NameVirtualHost *:80
+
+<VirtualHost *:80>
+    ServerName {{ salt['pillar.get']('sentry:hostname') }}
+    ProxyPass / http://127.0.0.1:9000/
+    ProxyPassReverse / http://127.0.0.1:9000/
+    ProxyPreserveHost On
+    RequestHeader set X-Forwarded-Proto "https" env=HTTPS
+</VirtualHost>
