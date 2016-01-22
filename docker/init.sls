@@ -1,99 +1,51 @@
-{%- set version = '1.7.1' %}
-{%- set user = salt['cmd.run']('stat -f ''%Su'' /dev/console') %}
-{%- set home = salt['user.info'](user)['home'] %}
+{%- from "macros.jinja2" import user, home with context %}
 
 include:
   - brew
 
-boot2docker:
-  cmd:
-    - run
-    - name: brew install boot2docker
-    - unless: brew list | grep boot2docker
-    - user: {{ user }}
+docker:
+  pkg:
+    - installed
+    - pkgs:
+      - xhyve
+      - docker
+      - docker-compose
+      - docker-machine
     - require:
-      - cmd: brew
-{%- if version not in salt['cmd.run']('boot2docker version') %}
-      - file: boot2docker_absent_old_version
+      - cmd: brew_update
 
-boot2docker_stop:
-  cmd:
-    - run
-    - name: boot2docker stop
-    - user: {{ user }}
-    - require:
-      - cmd: boot2docker
-
-boot2docker_absent_old_version:
-  cmd:
-    - run
-    - name: brew unlink boot2docker
-    - user: {{ user }}
-    - require:
-      - cmd: boot2docker_stop
+docker-xhyve:
   file:
-    - absent
-    - names:
-      - /usr/local/bin/boot2docker
-      - {{ home }}/VirtualBox\ VMs/boot2docker-vm
-      - {{ home }}/.boot2docker
-      - {{ home }}/.ssh/id_boot2docker
-      - {{ home }}/.ssh/id_boot2docker.pub
-    - require:
-      - cmd: boot2docker_absent_old_version
+    - managed
+    - name: /usr/local/bin/docker-machine-driver-xhyve
+    - source: https://github.com/zchee/docker-machine-driver-xhyve/releases/download/v0.2.1/docker-machine-driver-xhyve
+    - source_hash: md5=e8d2e23d76e29e13dd050c912916f0af
+    - user: root
+    - group: wheel
+    - mode: 4755
 
-boot2docker_link:
+com.apple.NetworkSharing:
+  service:
+    - running
+
+{%- set machine_name = salt['pillar.get']('docker:machine_name', 'boot2docker') %}
+docker-machine:
   cmd:
     - run
-    - name: brew link boot2docker
+    - name: docker-machine create {{ machine_name }} --driver xhyve --xhyve-experimental-nfs-share
     - user: {{ user }}
-    - unless: test -L /usr/local/bin/boot2docker
+    - unless: docker-machine status {{ machine_name }}
     - require:
-      - file: boot2docker_absent_old_version
-
-boot2docker_download:
-  cmd:
-    - run
-    - name: boot2docker download
-    - user: {{ user }}
-    - require:
-      - cmd: boot2docker_link
-{%- endif %}
-
-boot2docker_init:
-  cmd:
-    - wait
-    - name: boot2docker -v init
-    - user: {{ user }}
-    - watch:
-{%- if version not in salt['cmd.run']('boot2docker version') %}
-      - cmd: boot2docker_download
-{%- else %}
-      - cmd: boot2docker
-{%- endif %}
-
-boot2docker_start:
-  cmd:
-    - run
-    - name: boot2docker start
-    - user: {{ user }}
-    - unless: boot2docker status != 'running'
-    - require:
-      - cmd: boot2docker_init
-  file:
-    - symlink
-    - name: {{ home }}/Library/LaunchAgents/homebrew.mxcl.boot2docker.plist
-    - target: /usr/local/opt/boot2docker/homebrew.mxcl.boot2docker.plist
-    - user: {{ user }}
-    - require:
-      - cmd: boot2docker_start
+      - pkg: docker
+      - file: docker-xhyve
+      - service: com.apple.NetworkSharing
 
 {{ home }}/.zprofile:
   file:
     - append
     - text: |
-        export DOCKER_HOST=tcp://192.168.59.103:2376
-        export DOCKER_CERT_PATH={{ home }}/.boot2docker/certs/boot2docker-vm
+        export DOCKER_HOST=tcp://192.168.64.2:2376
+        export DOCKER_CERT_PATH={{ home }}/.docker/machine/certs
         export DOCKER_TLS_VERIFY=1
     - require:
-      - cmd: boot2docker_start
+      - cmd: docker-machine
