@@ -18,3 +18,10 @@ vimrc:
     - user: {{ user }}
     - watch:
       - file: vimrc
+
+{{ home }}/.vimrc.d:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: staff
+    - mode: 755
