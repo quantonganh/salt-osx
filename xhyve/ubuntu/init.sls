@@ -59,3 +59,12 @@ xhyve-ubuntu-hard-disk:
     - user: {{ user }}
     - group: staff
     - mode: 755
+
+/Library/LaunchDaemons/xhyve.ubuntu.plist:
+  file:
+    - managed
+    - source: salt://xhyve/ubuntu/plist.jinja2
+    - template: jinja
+    - user: root
+    - group: wheel
+    - mode: 644
