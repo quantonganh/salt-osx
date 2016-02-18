@@ -2,20 +2,6 @@ mypkgs:
   pkg:
     - installed
     - pkgs:
-      - git
-      - bash-completion
-      - gpg
-      - htop-osx
-      - lsyncd
-      - macvim
-      - mc
-      - mysql
-      - ncdu
-      - plowshare
-      - pv
-      - reattach-to-user-namespace
-      - s3cmd
-      - tig
-      - tmux
-      - tree
-      - xz
+{%- for pkg in salt['pillar.get']('pkgs') %}
+      - {{ pkg }}
+{%- endfor %}
