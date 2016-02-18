@@ -2,12 +2,12 @@
 
 include:
   - brew
+  - xhyve
 
 docker:
   pkg:
     - installed
     - pkgs:
-      - xhyve
       - docker
       - docker-compose
       - docker-machine
@@ -23,6 +23,8 @@ docker-xhyve:
     - user: root
     - group: wheel
     - mode: 4755
+    - require:
+      - pkg: xhyve
 
 com.apple.NetworkSharing:
   service:
