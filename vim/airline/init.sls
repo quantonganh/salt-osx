@@ -14,14 +14,10 @@ vim_airline:
     - user: {{ user }}
     - unless: test -d {{ home }}/.vim/bundle/vim-airline
   file:
-    - append
-    - name: {{ home }}/.vimrc
-    - text: |
-
-        " airline
+    - managed
+    - name: {{ home }}/.vimrc.d/airline.vim
+    - contents: |
         set laststatus=2
-        " end of airline
     - require:
       - git: vim_airline
-    - watch_in:
-      - cmd: vimrc
+      - file: {{ home }}.vimrc.d

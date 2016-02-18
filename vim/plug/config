@@ -1,0 +1,8 @@
+call plug#begin('~/.vim/bundle')
+Plug 'Yggdroot/indentLine'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'jiangmiao/auto-pairs'
+Plug 'saltstack/salt-vim'
+Plug 'timmywil/snipmate-snippets'
+Plug 'fatih/vim-go'
+call plug#end()

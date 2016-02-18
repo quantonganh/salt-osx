@@ -1,0 +1,5 @@
+let g:UltiSnipsSnippetsDir ="~/.vim/bundle/ultisnips/UltiSnips"
+let g:UltiSnipsListSnippets = "<c-j>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
