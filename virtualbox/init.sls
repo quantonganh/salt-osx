@@ -11,7 +11,6 @@ virtualbox:
     - name: brew-cask install virtualbox
     - user: {{ user }}
     - unless: brew-cask list | grep virtualbox
-    - onlyif: VBoxManage -v != {{ main_version }} + 'r' + {{ sub_version }}
     - require:
       - cmd: brew-cask
 {%- if salt['cmd.run']('VBoxManage -v') not in ('', main_version + 'r' + sub_version) %}

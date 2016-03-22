@@ -1,6 +1,8 @@
-{{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle:
+{%- from "macros.jinja2" import user, home with context %}
+
+{{ home }}/.vim/bundle:
   file:
     - directory
-    - user: {{ pillar['user'] }}
+    - user: {{ user }}
     - group: staff
     - mode: 755

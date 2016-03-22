@@ -1,4 +1,4 @@
-{%- from "macros.jinja2" import user as user %}
+{%- from "macros.jinja2" import user, home with context %}
 
 include:
   - brew
@@ -10,7 +10,7 @@ zsh-completions:
       - cmd: brew
   file:
     - append
-    - name: {{ user.home }}/.zshrc
+    - name: {{ home }}/.zshrc
     - text: |
         fpath=(/usr/local/share/zsh-completions $fpath)
     - require:
@@ -19,7 +19,7 @@ zsh-completions:
 zcompdump:
   file:
     - absent
-    - name: {{ user.home }}/.zcompdump
+    - name: {{ home }}/.zcompdump
     - require:
       - file: zsh-completions
   cmd:

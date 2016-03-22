@@ -1,3 +1,5 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 include:
   - git
 
@@ -5,13 +7,13 @@ https://github.com/gitlabhq/gitlab-shell.git:
   git:
     - latest
     - rev: v1.9.7
-    - target: {{ pillar['home'] }}/git/gitlab-shell
+    - target: {{ home }}/git/gitlab-shell
     - user: git
     - require:
-      - file: {{ pillar['home'] }}/git
-    - unless: 'test -d {{ pillar['home'] }}/git/gitlab-shell/.git'
+      - file: {{ home }}/git
+    - unless: 'test -d {{ home }}/git/gitlab-shell/.git'
 
-{{ pillar['home'] }}/git/gitlab-shell/config.yml:
+{{ home }}/git/gitlab-shell/config.yml:
   file:
     - managed
     - template: jinja
@@ -23,9 +25,9 @@ https://github.com/gitlabhq/gitlab-shell.git:
 gitlab_shell_install:
   cmd:
     - run
-    - cwd: {{ pillar['home'] }}/git/gitlab-shell
+    - cwd: {{ home }}/git/gitlab-shell
     - name: ./bin/install
     - user: git
     - require:
-      - file: {{ pillar['home'] }}/git/gitlab-shell/config.yml
+      - file: {{ home }}/git/gitlab-shell/config.yml
 

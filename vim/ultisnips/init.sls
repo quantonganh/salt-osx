@@ -1,14 +1,14 @@
-{%- from "macros.jinja2" import user with context %}
+{%- from "macros.jinja2" import user, home with context %}
 
 include:
   - vim.pathogen
 
 vim_ultisnips:
-{%- if salt['file.directory_exists'](user.home + '/.vim/bundle/ultisnips') %}
+{%- if salt['file.directory_exists'](home + '/.vim/bundle/ultisnips') %}
   cmd:
     - run
-    - user: {{ user.owner }}
-    - cwd: {{ user.home }}/.vim/bundle/ultisnips
+    - user: {{ user }}
+    - cwd: {{ home }}/.vim/bundle/ultisnips
     - name: |
         git fetch origin master
         git reset --hard FETCH_HEAD
@@ -18,16 +18,16 @@ vim_ultisnips:
   git:
     - latest
     - name: https://github.com/SirVer/ultisnips.git
-    - target: {{ user.home }}/.vim/bundle/ultisnips
-    - user: {{ user.owner }}
+    - target: {{ home }}/.vim/bundle/ultisnips
+    - user: {{ user }}
   file:
     - accumulated
     - name: plugins
-    - filename: {{ user.home }}/.vimrc
+    - filename: {{ home }}/.vimrc
     - require_in:
       - git: vim_ultisnips
       - file: vimrc
-      - file: /Users/quanta/.vim/bundle/ultisnips/UltiSnips
+      - file: {{ home }}/.vim/bundle/ultisnips/UltiSnips
     - text: |
         " gundo
         let g:UltiSnipsSnippetsDir ="~/.vim/bundle/ultisnips/UltiSnips"
@@ -37,20 +37,20 @@ vim_ultisnips:
         let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
         " end of gundo
 
-/Users/quanta/.vim/bundle/ultisnips/UltiSnips:
+{{ home }}/.vim/bundle/ultisnips/UltiSnips:
   file:
     - directory
-    - user: {{ user.owner }}
+    - user: {{ user }}
     - group: staff
     - mode: 750
     - require:
       - git: vim_ultisnips
 
-{{ user.home }}/.vim/bundle/ultisnips/UltiSnips/jinja2.snippets:
+{{ home }}/.vim/bundle/ultisnips/UltiSnips/jinja2.snippets:
   file:
     - managed
     - source: salt://vim/ultisnips/jinja2.snippets
-    - user: {{ user.owner }}
+    - user: {{ user }}
     - group: staff
     - mode: 600
     - require:

@@ -1,3 +1,5 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 rabbitmq:
   pkg:
     - installed
@@ -5,13 +7,13 @@ rabbitmq:
     - run
     - name: service.start
     - job_label: homebrew.mxcl.rabbitmq
-    - runas: quanta
+    - runas: {{ user }}
     - require:
-      - file: {{ pillar['home'] }}/{{ pillar['user'] }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist
+      - file: {{ home }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist
   rabbitmq_user:
     - absent
     - name: guest
-    - runas: quanta
+    - runas: {{ user }}
 
 rabbitmq_monitor_user:
   rabbitmq_user:
@@ -25,7 +27,7 @@ rabbitmq_monitor_user:
         - '.*'
         - '.*'
         - '.*'
-    - runas: quanta
+    - runas: {{ user }}
     - require:
       - module: rabbitmq
   module:
@@ -33,7 +35,7 @@ rabbitmq_monitor_user:
     - name: rabbitmq.set_user_tags
     - m_name: {{ pillar['rabbitmq']['monitor']['user'] }}
     - tags: monitoring
-    - runas: quanta
+    - runas: {{ user }}
     - require:
       - rabbitmq_user: rabbitmq_monitor_user
 
@@ -43,7 +45,7 @@ rabbitmq_management_user:
     - name: {{ pillar['rabbitmq']['management']['user'] }}
     - password: {{ pillar['rabbitmq']['management']['password'] }}
     - force: True
-    - runas: quanta
+    - runas: {{ user }}
     - require:
       - module: rabbitmq
   module:
@@ -51,7 +53,7 @@ rabbitmq_management_user:
     - name: rabbitmq.set_user_tags
     - m_name: {{ pillar['rabbitmq']['management']['user'] }}
     - tags: management
-    - runas: quanta
+    - runas: {{ user }}
     - require:
       - rabbitmq_user: rabbitmq_management_user
 
@@ -60,7 +62,7 @@ set_management_tags:
     - run
     - name: cmd.run
     - cmd: rabbitmqctl set_user_tags {{ pillar['rabbitmq']['management']['user'] }} management
-    - runas: quanta
+    - runas: {{ user }}
     - require:
       - rabbitmq_user: rabbitmq_management_user
 
@@ -72,11 +74,11 @@ rabbitmq-link:
     - require:
       - pkg: rabbitmq
 
-{{ pillar['home'] }}/{{ pillar['user'] }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
+{{ home }}/Library/LaunchAgents/homebrew.mxcl.rabbitmq.plist:
   file:
     - symlink
     - target: /usr/local/opt/rabbitmq/homebrew.mxcl.rabbitmq.plist
-    - user: quanta
+    - user: {{ user }}
     - group: staff
     - require:
       - pkg: rabbitmq

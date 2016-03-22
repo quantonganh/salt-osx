@@ -15,7 +15,7 @@ mc:
     - managed
     - name: /usr/local/Cellar/midnight-commander/{{ version }}/etc/mc/mc.keymap
     - source: salt://mc/keymap
-    - user: {{ user.owner }}
+    - user: {{ user }}
     - group: admin
     - mode: 644
     - require:

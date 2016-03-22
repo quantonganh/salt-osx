@@ -1,6 +1,6 @@
 [user]
-	name = quanta
-	email = tonganhquan.net@gmail.com
+	name = {{ salt['pillar.get']('git:name') }}
+	email = {{ salt['pillar.get']('git:email') }}
 [core]
 	editor = /usr/bin/vim
 {%- if grains['os'] == 'Windows' %}

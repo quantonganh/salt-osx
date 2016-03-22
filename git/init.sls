@@ -1,12 +1,14 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 git:
   group:
     - present
   user:
     - present
-    - groups: 
+    - groups:
       - git
     - shell: /bin/sh
-    - home: {{ pillar['home'] }}/git
+    - home: {{ home }}/git
     - createhome: False
     - requite:
       - group: git
@@ -23,7 +25,7 @@ git_hide:
     - name: defaults write /Library/Preferences/com.apple.loginwindow SHOWOTHERUSERS_MANAGED -bool FALSE
     - onlyif: defaults read /Library/Preferences/com.apple.loginwindow | grep '"SHOWOTHERUSERS_MANAGED" = 1'
 
-{{ pillar['home'] }}/git:
+{{ home }}/git:
   file:
     - directory
     - user: git
@@ -33,11 +35,11 @@ git_hide:
       - user: git
       - group: git
 
-{{ pillar['home'] }}/{{ pillar['user'] }}/.gitconfig:
+{{ home }}/.gitconfig:
   file:
     - managed
     - template: jinja
     - source: salt://git/config.jinja2
-    - user: {{ pillar['user'] }}
+    - user: {{ user }}
     - group: staff
     - mode: 644

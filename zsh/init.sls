@@ -7,7 +7,8 @@ zsh:
   file:
     - managed
     - name: {{ home }}/.zprezto/runcoms/zshrc
-    - source: salt://zsh/config
+    - source: salt://zsh/config.jinja2
+    - template: jinja
     - user: {{ user }}
     - group: staff
     - mode: 644

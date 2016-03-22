@@ -1,9 +1,10 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 include:
   - git
   - redis
 
-{%- set home_dir = "{{ pillar['home'] }}/git" %}
-{%- set gitlab_dir = home_dir + "/gitlab" %}
+{%- set gitlab_dir = home ~ "/gitlab" %}
 
 icu4c:
   pkg:
@@ -16,10 +17,10 @@ https://github.com/gitlabhq/gitlabhq.git:
     - target: /Users/git/gitlab
     - user: git
     - require:
-      - file: {{ pillar['home'] }}/git
-    - unless: 'test -d {{ pillar['home'] }}/git/gitlab/.git'
+      - file: {{ home }}/git
+    - unless: 'test -d {{ home }}/git/gitlab/.git'
 
-{{ pillar['home'] }}/git/gitlab/config/gitlab.yml:
+{{ home }}/git/gitlab/config/gitlab.yml:
   file:
     - managed
     - template: jinja
@@ -29,14 +30,14 @@ https://github.com/gitlabhq/gitlabhq.git:
     - mode: 644
 
 {% for d in ('gitlab/log', 'gitlab/tmp', 'gitlab-satellites', 'gitlab/tmp/sockets', 'gitlab/tmp/pids', 'gitlab/public/upload') %}
-{{ pillar['home'] }}/git/{{ d }}:
+{{ home }}/git/{{ d }}:
   file:
     - directory
     - user: git
     - mode: 700
 {% endfor %}
 
-{{ pillar['home'] }}/git/repositories/:
+{{ home }}/git/repositories/:
   file:
     - directory
     - user: git
@@ -46,15 +47,15 @@ https://github.com/gitlabhq/gitlabhq.git:
 repositories-sgid:
   cmd:
     - run
-    - name: find {{ pillar['home'] }}/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
+    - name: find {{ home }}/git/repositories/ -type d -print0 | sudo xargs -0 chmod g+s
     - require:
-      - file: {{ pillar['home'] }}/git/repositories/
+      - file: {{ home }}/git/repositories/
 
 unicorn:
   gem:
     - installed
 
-{{ pillar['home'] }}/git/gitlab/config/unicorn.rb:
+{{ home }}/git/gitlab/config/unicorn.rb:
   file:
     - managed
     - template: jinja
@@ -65,7 +66,7 @@ unicorn:
     - require:
       - gem: unicorn
 
-{{ pillar['home'] }}/git/gitlab/config/initializers/rack_attack.rb:
+{{ home }}/git/gitlab/config/initializers/rack_attack.rb:
   file:
     - managed
     - template: jinja
@@ -74,7 +75,7 @@ unicorn:
     - group: git
     - mode: 644
 
-{{ pillar['home'] }}/git/gitlab/config/database.yml:
+{{ home }}/git/gitlab/config/database.yml:
   file:
     - managed
     - template: jinja
@@ -110,7 +111,7 @@ gitlab_bundler:
   cmd:
     - run
     - name: bundle install --deployment --without development test postgres aws --verbose
-    - cwd: {{ salt['user.info']('git')['home'] }}/gitlab
+    - cwd: {{ home }}/gitlab
     - require:
       - gem: gitlab_bundler
       - cmd: rugged

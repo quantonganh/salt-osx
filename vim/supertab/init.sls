@@ -1,4 +1,4 @@
-{%- from "macros.jinja2" import user with context %}
+{%- from "macros.jinja2" import user, home with context %}
 
 include:
   - vim.pathogen
@@ -7,13 +7,13 @@ vim_supertab:
   git:
     - latest
     - name: https://github.com/ervandew/supertab.git
-    - target: {{ user.home }}/.vim/bundle/supertab
-    - user: {{ user.owner }}
-    - unless: test -d {{ user.home }}/.vim/bundle/supertab
+    - target: {{ home }}/.vim/bundle/supertab
+    - user: {{ user }}
+    - unless: test -d {{ home }}/.vim/bundle/supertab
   file:
     - accumulated
     - name: plugins
-    - filename: {{ user.home }}/.vimrc
+    - filename: {{ home }}/.vimrc
     - require_in:
       - git: vim_supertab
       - file: vimrc

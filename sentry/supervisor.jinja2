@@ -1,6 +1,8 @@
+{%- from "macros.jinja2" import user with context %}
+
 [program:sentry-web]
 directory=/usr/local/sentry/
-user: quanta
+user: {{ user }}
 command=/usr/local/sentry/bin/sentry start
 autostart=true
 autorestart=true
@@ -10,7 +12,7 @@ stderr_logfile=/usr/local/var/log/sentry.log
 
 [program:sentry-worker]
 directory=/usr/local/sentry/
-user: quanta
+user: {{ user }}
 command=/usr/local/sentry/bin/sentry celery worker
 autostart=true
 autorestart=true
@@ -20,7 +22,7 @@ stderr_logfile=/usr/local/var/log/sentry.log
 
 [program:sentry-cron]
 directory=/usr/local/sentry/
-user: quanta
+user: {{ user }}
 command=/usr/local/sentry/bin/sentry celery beat
 autostart=true
 autorestart=true

@@ -1,3 +1,4 @@
+{%- from "macros.jinja2" import user, home, downloads with context %}
 {%- set version = '2.5.2' %}
 
 include:
@@ -20,23 +21,23 @@ redmine_passenger:
 imagemagick_download:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: wget http://cactuslab.com/imagemagick/assets/ImageMagick-6.8.8-6.pkg.zip
-    - unless: test -f /Users/quanta/Downloads/ImageMagick-6.8.8-6.pkg.zip
+    - unless: test -f {{ downloads }}ImageMagick-6.8.8-6.pkg.zip
 
 imagemagick_extract:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: unzip ImageMagick-6.8.8-6.pkg.zip
-    - unless: test -f /Users/quanta/Downloads/ImageMagick-6.8.8-6.pkg
+    - unless: test -f {{ downloads }}ImageMagick-6.8.8-6.pkg
     - require:
       - cmd: imagemagick_download
 
 imagemagick_install:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: installer -verbose -pkg ImageMagick-6.8.8-6.pkg -target /
     - unless: test -d /opt/ImageMagick
     - require:
@@ -45,14 +46,14 @@ imagemagick_install:
 pkgconfig_download:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: wget http://ncu.dl.sourceforge.net/project/macpkg/PkgConfig/0.26/PkgConfig.pkg
-    - unless: test -f /Users/quanta/Downloads/PkgConfig.pkg
+    - unless: test -f {{ downloads }}PkgConfig.pkg
 
 pkgconfig_install:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: installer -verbose -pkg PkgConfig.pkg -target /
     - unless: test -d /opt/pkgconfig
     - require:
@@ -66,28 +67,28 @@ export_path:
 rmagick_download:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: wget http://rubygems.org/downloads/rmagick-2.13.3.gem
     - unless: test -f rmagick-2.13.3.gem
 
 rmagick_install:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: C_INCLUDE_PATH=/opt/ImageMagick/include/ImageMagick-6/ PKG_CONFIG_PATH=/opt/ImageMagick/lib/pkgconfig/ gem install --local rmagick-2.13.3.gem
     - unless: gem list -i rmagick
 
 redmine_download:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: wget http://www.redmine.org/releases/redmine-{{ version }}.tar.gz
-    - unless: test -f /Users/quanta/Downloads/redmine-{{ version }}.tar.gz
+    - unless: test -f {{ downloads }}redmine-{{ version }}.tar.gz
 
 redmine_extract:
   cmd:
     - run
-    - cwd: /Users/quanta/Downloads/
+    - cwd: {{ downloads }}
     - name: tar zxvf redmine-{{ version }}.tar.gz -C /Library/WebServer/Documents
     - unless: test -d /Library/WebServer/Documents/redmine-{{ version }}
     - require:

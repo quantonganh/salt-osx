@@ -1,3 +1,5 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 include:
   - apache
 
@@ -72,8 +74,8 @@ createsuperuser:
     - name: django.createsuperuser
     - settings_module: djangopypi2.website.settings
     - bin_env: /opt/djangopypi2
-    - username: quanta
-    - email: anhquankitty@gmail.com
+    - username: {{ salt['pillar.get']('djangopypi2:admin:username') }}
+    - email: {{ salt['pillar.get']('djangopypi2:admin:email') }}
 
 djangopypi2_hostname:
   cmd:
@@ -102,7 +104,7 @@ djangopypi2_hostname:
     - mode: 755
 
 extend:
-  httpd:
+  apache:
     module:
       - watch:
         - file: /etc/apache2/other/pip.conf

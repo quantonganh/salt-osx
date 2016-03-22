@@ -1,18 +1,20 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 include:
   - vim.pathogen
 
 https://github.com/davidhalter/jedi-vim.git:
   git:
     - latest
-    - target: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/jedi-vim
-    - user: {{ pillar['user'] }}
-    - unless: test -d {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/jedi-vim
+    - target: {{ home }}/.vim/bundle/jedi-vim
+    - user: {{ user }}
+    - unless: test -d {{ home }}/.vim/bundle/jedi-vim
 
 jedi-submodule:
   module:
     - run
-    - cwd: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/bundle/jedi-vim
+    - cwd: {{ home }}/.vim/bundle/jedi-vim
     - name: git.submodule
-    - user: {{ pillar['user'] }}
+    - user: {{ user }}
     - require:
       - git: https://github.com/davidhalter/jedi-vim.git

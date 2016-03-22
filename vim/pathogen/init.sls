@@ -1,10 +1,12 @@
+{%- from "macros.jinja2" import user, home with context %}
+
 include:
   - vim
 
-{{ pillar['home'] }}/{{ pillar['user'] }}/.vim/autoload:
+{{ home }}/.vim/autoload:
   file:
     - directory
-    - user: {{ pillar['user'] }}
+    - user: {{ user }}
     - group: staff
     - mode: 755
 
@@ -12,16 +14,16 @@ pathogen.vim:
   cmd:
     - run
     - name: curl -Sso ~/.vim/autoload/pathogen.vim https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-    - user: {{ pillar['user'] }}
-    - unless: test -f {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/autoload/pathogen.vim
+    - user: {{ user }}
+    - unless: test -f {{ home }}/.vim/autoload/pathogen.vim
     - require:
-      - file: {{ pillar['home'] }}/{{ pillar['user'] }}/.vim/autoload
+      - file: {{ home }}/.vim/autoload
 
 pathogen-vimrc:
   cmd:
     - run
-    - name: echo 'execute pathogen#infect()' >> {{ pillar['home'] }}/{{ pillar['user'] }}/.vimrc
-    - user: {{ pillar['user'] }}
-    - unless: grep pathogen {{ pillar['home'] }}/{{ pillar['user'] }}/.vimrc
+    - name: echo 'execute pathogen#infect()' >> {{ home }}/.vimrc
+    - user: {{ user }}
+    - unless: grep pathogen {{ home }}/.vimrc
     - require:
       - cmd: pathogen.vim
