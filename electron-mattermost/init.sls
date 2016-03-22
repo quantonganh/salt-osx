@@ -1,13 +1,13 @@
 {%- from "macros.jinja2" import user, home, downloads with context %}
 
-{%- set version = '1.0.5' %}
+{%- set version = '1.0.7' %}
 
 electron-mattermost:
   archive:
     - extracted
     - name: {{ downloads }}
     - source: https://github.com/yuya-oc/electron-mattermost/releases/download/v{{ version }}/electron-mattermost-v{{ version }}-osx.tar.gz
-    - source_hash: md5=9d6bb6916a23477d47498aece180d793
+    - source_hash: md5=612601c3e42520024138046be4d15cc4
     - archive_format: tar
     - tar_options: x
     - user: {{ user }}
