@@ -1,3 +1,6 @@
+include:
+  - brew
+
 mypkgs:
   pkg:
     - installed
@@ -5,3 +8,5 @@ mypkgs:
 {%- for pkg in salt['pillar.get']('pkgs') %}
       - {{ pkg }}
 {%- endfor %}
+    - require:
+      - cmd: brew
