@@ -4,9 +4,9 @@
 <plist version="1.0">
   <dict>
     <key>Label</key>
-    <string>xhyve.ubuntu</string>
+    <string>xhyve.{{ oscodename }}</string>
     <key>WorkingDirectory</key>
-    <string>{{ home }}/xhyve/ubuntu/</string>
+    <string>{{ home }}/xhyve/{{ oscodename }}/</string>
     <key>ProgramArguments</key>
     <array>
       <string>./run.sh</string>
@@ -14,8 +14,8 @@
     <key>RunAtLoad</key>
     <true/>
     <key>StandardErrorPath</key>
-    <string>/var/log/xhyve.log</string>
+    <string>/var/log/xhyve/{{ oscodename }}.log</string>
     <key>StandardOutPath</key>
-    <string>/var/log/xhyve.log</string>
+    <string>/var/log/xhyve/{{ oscodename }}.log</string>
   </dict>
 </plist>
