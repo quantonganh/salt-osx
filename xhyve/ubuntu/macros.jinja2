@@ -1,0 +1,62 @@
+{%- from "macros.jinja2" import user, home with context %}
+{%- from "xhyve/ubuntu/map.jinja2" import ubuntu with context %}
+
+{%- macro install_vm(oscodename) %}
+include:
+  - xhyve
+
+xhyve-{{ oscodename }}:
+  file:
+    - directory
+    - name: {{ home }}/xhyve/{{ oscodename }}
+    - user: {{ user }}
+    - group: staff
+    - mode: 755
+    - require:
+      - file: xhyve
+
+{%- for file, properties in ubuntu[oscodename].iteritems() %}
+{{ home }}/xhyve/{{ oscodename }}/{{ file }}:
+  file:
+    - managed
+    - source: {{ properties['source'] }}
+    - source_hash: md5={{ properties['md5'] }}
+    - user: {{ user }}
+    - group: staff
+    - mode: 644
+    - require:
+      - file: xhyve-{{ oscodename }}
+{%- endfor %}
+
+xhyve-{{ oscodename }}-hard-disk:
+  cmd:
+    - run
+    - name: dd if=/dev/zero of={{ oscodename }}.img bs=1g count={{ salt['pillar.get']('xhyve:disk_size', 16) }}
+    - user: {{ user }}
+    - cwd: {{ home }}/xhyve/{{ oscodename }}
+    - creates: {{ home }}/xhyve/{{ oscodename }}/{{ oscodename }}.img
+    - require:
+      - file: xhyve-{{ oscodename }}
+
+{{ home }}/xhyve/{{ oscodename }}/install.sh:
+  file:
+    - managed
+    - source: salt://xhyve/ubuntu/install.jinja2
+    - template: jinja
+    - user: {{ user }}
+    - group: staff
+    - mode: 755
+    - context:
+        oscodename: {{ oscodename }}
+
+/Library/LaunchDaemons/xhyve.{{ oscodename }}.plist:
+  file:
+    - managed
+    - source: salt://xhyve/ubuntu/plist.jinja2
+    - template: jinja
+    - user: root
+    - group: wheel
+    - mode: 644
+    - context:
+        oscodename: {{ oscodename }}
+{%- endmacro %}
