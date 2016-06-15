@@ -1,6 +1,9 @@
 {%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
 {%- set home = salt['user.info'](user)['home'] %}
 
+include:
+  - pkgs
+
 prezto:
   git:
     - latest
@@ -65,3 +68,5 @@ prezto-prompt:
       - wget -P {{ home }}/.zprezto/modules/prompt/external/pure https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh
     - watch:
       - git: prezto
+    - require:
+      - pkg: mypkgs
