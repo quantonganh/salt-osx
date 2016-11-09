@@ -13,18 +13,18 @@ vim_ctrlp:
     - user: {{ user }}
     - unless: test -d {{ home }}/.vim/bundle/ctrlp.vim
   file:
-    - append
-    - name: {{ home }}/.vimrc
-    - text: |
-
-        " ctrp
+    - managed
+    - name: {{ home }}/.vimrc.d/ctrlp.vim
+    - contents: |
+        let mapleader = "\<Space>"
         set runtimepath^=~/.vim/bundle/ctrlp.vim
         let g:ctrlp_map = '<leader>f'
+        map <leader>b :CtrlPBuffer
         let g:ctrlp_prompt_mappings = {
             \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
             \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
             \ }
-        " end of ctrlp
+        let g:ctrlp_switch_buffer = '0'
     - require:
       - git: vim_ctrlp
     - watch_in:

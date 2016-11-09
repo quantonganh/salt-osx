@@ -1,7 +1,0 @@
-let mapleader = ","
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_map = '<leader>f'
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
-    \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
-    \ }
