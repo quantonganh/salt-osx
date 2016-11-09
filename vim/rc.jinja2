@@ -35,69 +35,37 @@ call vundle#rc()
 
 Bundle 'gmarik/vundle'
 
-" powerline
-
-" end of powerline
-
 set nocompatible
 filetype plugin indent on
 autocmd BufRead,BufNewFile *.jinja2 set filetype=jinja
 
 nnoremap <F6> :GundoToggle<CR>
-let g:syntastic_check_on_open=1
-let g:syntastic_python_checkers=['flake8']
-
-let g:UltiSnipsSnippetsDir ="~/.vim/bundle/ultisnips/UltiSnips"
-let g:UltiSnipsListSnippets = "<c-j>"
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 au BufNewFile *.jinja2 so ~/.vim/header/jinja_header.txt
 au BufNewFile *.py so ~/.vim/header/py_header.txt
 au BufNewFile *.sls so ~/.vim/header/sls_header.txt
 
-let mapleader = ","
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_map = '<leader>f'
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<c-v>', '<2-LeftMouse>'],
-    \ 'AcceptSelection("v")': ['<cr>', '<RightMouse>'],
-    \ }
-" airline
-set laststatus=2
-" end of airline
+nnoremap <Leader>o :CtrlP<CR>
+nnoremap <Leader>w :w<CR>
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+nmap <Leader><Leader> V
+
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
 
 " highlight excess line length (79)
 autocmd Filetype py rst textwidth=79
 set colorcolumn=+1
 
-" go
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-" end of go
-
-" neocomplete
-let g:neocomplete#enable_at_startup = 1
-" end of neocomplete
-
 " disable folding
 set nofoldenable
 " end of disable folding
 
-{%- if accumulator|default(False) %}
-  {%- for line in accumulator['plugins'] %}
-{{ line }}
-  {%- endfor %}
-{%- endif %}
-
-" vim-plug
-call plug#begin('~/.vim/bundle')
-{%- for plug in salt['pillar.get']('vim:plugins') %}
-Plug {{ plug }}
-{%- endfor %}
-call plug#end()
-" end of vim-plug
+for fpath in split(globpath('~/.vimrc.d/', '*.vim'), '\n')
+  exe 'source' fpath
+endfor
