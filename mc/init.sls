@@ -1,6 +1,6 @@
 {%- from "macros.jinja2" import user with context %}
 
-{%- set version = '4.8.12' %}
+{%- set version = '4.8.15' %}
 
 include:
   - brew
