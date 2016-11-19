@@ -5,8 +5,9 @@ brew:
     - run
     - user: {{ user }}
     - name: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    - creates: /usr/local/bin/brew
+    - unless: test -f /usr/local/bin/brew
 
+{%- if salt['pillar.get']('brew:update', False) %}
 brew_update:
   cmd:
     - run
@@ -15,3 +16,4 @@ brew_update:
     - unless: brew doctor
     - require:
       - cmd: brew
+{%- endif %}
