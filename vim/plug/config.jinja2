@@ -1,0 +1,5 @@
+call plug#begin('~/.vim/bundle')
+{%- for plug in salt['pillar.get']('vim:plugins') %}
+Plug '{{ plug }}'
+{%- endfor %}
+call plug#end()
