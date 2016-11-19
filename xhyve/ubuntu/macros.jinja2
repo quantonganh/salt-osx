@@ -5,7 +5,7 @@
 include:
   - xhyve
 
-xhyve-{{ oscodename }}:
+xhyve_{{ oscodename }}:
   file:
     - directory
     - name: {{ home }}/xhyve/{{ oscodename }}
@@ -25,10 +25,10 @@ xhyve-{{ oscodename }}:
     - group: staff
     - mode: 644
     - require:
-      - file: xhyve-{{ oscodename }}
+      - file: xhyve_{{ oscodename }}
 {%- endfor %}
 
-xhyve-{{ oscodename }}-hard-disk:
+xhyve_{{ oscodename }}_hard_disk:
   cmd:
     - run
     - name: dd if=/dev/zero of={{ oscodename }}.img bs=1g count={{ salt['pillar.get']('xhyve:disk_size', 16) }}
@@ -36,7 +36,7 @@ xhyve-{{ oscodename }}-hard-disk:
     - cwd: {{ home }}/xhyve/{{ oscodename }}
     - creates: {{ home }}/xhyve/{{ oscodename }}/{{ oscodename }}.img
     - require:
-      - file: xhyve-{{ oscodename }}
+      - file: xhyve_{{ oscodename }}
 
 {{ home }}/xhyve/{{ oscodename }}/install.sh:
   file:
