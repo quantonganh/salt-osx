@@ -7,7 +7,7 @@ xhyve:
   pkg:
     - installed
     - require:
-      - cmd: brew_update
+      - cmd: brew{% if salt['pillar.get']('brew:update', False) %}_update{% endif %}
   file:
     - directory
     - name: {{ home }}/xhyve

@@ -12,7 +12,7 @@ docker:
       - docker-compose
       - docker-machine
     - require:
-      - cmd: brew_update
+      - cmd: brew{% if salt['pillar.get']('brew:update', False) %}_update{% endif %}
 
 docker-xhyve:
   file:
