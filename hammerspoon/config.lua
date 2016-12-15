@@ -1,39 +1,51 @@
-local function keyCode(key, modifiers)
-  modifiers = modifiers or {}
-  return function() hs.eventtap.keyStroke(modifiers, key) end
+-- https://github.com/Hammerspoon/hammerspoon/issues/1128#issuecomment-266104051
+
+local module = {}
+
+local keyHandler = function(e)
+    local watchFor = { h = "left", j = "down", k = "up", l = "right" }
+    local actualKey = e:getCharacters(true)
+    local replacement = watchFor[actualKey:lower()]
+    if replacement then
+        local isDown = e:getType() == hs.eventtap.event.types.keyDown
+        local flags  = {}
+        for k, v in pairs(e:getFlags()) do
+            if v and k ~= "fn" then -- fn will be down because that's our "wrapper", so ignore it
+                table.insert(flags, k)
+            end
+        end
+        print(replacement, hs.inspect(flags), isDown)
+        local replacementEvent = hs.eventtap.event.newKeyEvent(flags, replacement, isDown)
+        if isDown then
+            -- allow for auto-repeat
+            replacementEvent:setProperty(hs.eventtap.event.properties.keyboardEventAutorepeat, e:getProperty(hs.eventtap.event.properties.keyboardEventAutorepeat))
+        end
+        return true, { replacementEvent }
+    else
+        return false -- do nothing to the event, just pass it along
+    end
 end
 
-hs.hotkey.bind({'ctrl'}, 'h', keyCode('left'), nil, keyCode('left'))
-hs.hotkey.bind({'ctrl'}, 'j', keyCode('down'), nil, keyCode('down'))
-hs.hotkey.bind({'ctrl'}, 'k', keyCode('up'), nil, keyCode('up'))
-hs.hotkey.bind({'ctrl'}, 'l', keyCode('right'), nil, keyCode('right'))
+local modifierHandler = function(e)
+    local flags = e:getFlags()
+    local onlyControlPressed = false
+    for k, v in pairs(flags) do
+        onlyControlPressed = v and k == "fn"
+        if not onlyControlPressed then break end
+    end
+    -- you must tap and hold fn by itself to turn this on
+    if onlyControlPressed and not module.keyListener then
+        print("keyhandler on")
+        module.keyListener = hs.eventtap.new({ hs.eventtap.event.types.keyDown, hs.eventtap.event.types.keyUp }, keyHandler):start()
+    -- however, adding additional modifiers afterwards is ok... its only when we have no flags that we switch back off
+    elseif not next(flags) and module.keyListener then
+        print("keyhandler off")
+        module.keyListener:stop()
+        module.keyListener = nil
+    end
+    return false
+end
 
-hs.hotkey.bind({'ctrl', 'shift'}, 'h', keyCode('left', {'shift'}), nil, keyCode('left', {'shift'}))
-hs.hotkey.bind({'ctrl', 'shift'}, 'j', keyCode('down', {'shift'}), nil, keyCode('down', {'shift'}))
-hs.hotkey.bind({'ctrl', 'shift'}, 'k', keyCode('up', {'shift'}), nil, keyCode('up', {'shift'}))
-hs.hotkey.bind({'ctrl', 'shift'}, 'l', keyCode('right', {'shift'}), nil, keyCode('right', {'shift'}))
+module.modifierListener = hs.eventtap.new({ hs.eventtap.event.types.flagsChanged }, modifierHandler):start()
 
-hs.hotkey.bind({'ctrl', 'cmd'}, 'h', keyCode('left', {'cmd'}), nil, keyCode('left', {'cmd'}))
-hs.hotkey.bind({'ctrl', 'cmd'}, 'j', keyCode('down', {'cmd'}), nil, keyCode('down', {'cmd'}))
-hs.hotkey.bind({'ctrl', 'cmd'}, 'k', keyCode('up', {'cmd'}), nil, keyCode('up', {'cmd'}))
-hs.hotkey.bind({'ctrl', 'cmd'}, 'l', keyCode('right', {'cmd'}), nil, keyCode('right', {'cmd'}))
-
-hs.hotkey.bind({'ctrl', 'alt'}, 'h', keyCode('left', {'alt'}), nil, keyCode('left', {'alt'}))
-hs.hotkey.bind({'ctrl', 'alt'}, 'j', keyCode('down', {'alt'}), nil, keyCode('down', {'alt'}))
-hs.hotkey.bind({'ctrl', 'alt'}, 'k', keyCode('up', {'alt'}), nil, keyCode('up', {'alt'}))
-hs.hotkey.bind({'ctrl', 'alt'}, 'l', keyCode('right', {'alt'}), nil, keyCode('right', {'alt'}))
-
-hs.hotkey.bind({'ctrl', 'shift', 'cmd'}, 'h', keyCode('left', {'shift', 'cmd'}), nil, keyCode('left', {'shift', 'cmd'}))
-hs.hotkey.bind({'ctrl', 'shift', 'cmd'}, 'j', keyCode('down', {'shift', 'cmd'}), nil, keyCode('down', {'shift', 'cmd'}))
-hs.hotkey.bind({'ctrl', 'shift', 'cmd'}, 'k', keyCode('up', {'shift', 'cmd'}), nil, keyCode('up', {'shift', 'cmd'}))
-hs.hotkey.bind({'ctrl', 'shift', 'cmd'}, 'l', keyCode('right', {'shift', 'cmd'}), nil, keyCode('right', {'shift', 'cmd'}))
-
-hs.hotkey.bind({'ctrl', 'shift', 'alt'}, 'h', keyCode('left', {'shift', 'alt'}), nil, keyCode('left', {'shift', 'alt'}))
-hs.hotkey.bind({'ctrl', 'shift', 'alt'}, 'j', keyCode('down', {'shift', 'alt'}), nil, keyCode('down', {'shift', 'alt'}))
-hs.hotkey.bind({'ctrl', 'shift', 'alt'}, 'k', keyCode('up', {'shift', 'alt'}), nil, keyCode('up', {'shift', 'alt'}))
-hs.hotkey.bind({'ctrl', 'shift', 'alt'}, 'l', keyCode('right', {'shift', 'alt'}), nil, keyCode('right', {'shift', 'alt'}))
-
-hs.hotkey.bind({'ctrl', 'cmd', 'alt'}, 'h', keyCode('left', {'cmd', 'alt'}), nil, keyCode('left', {'cmd', 'alt'}))
-hs.hotkey.bind({'ctrl', 'cmd', 'alt'}, 'j', keyCode('down', {'cmd', 'alt'}), nil, keyCode('down', {'cmd', 'alt'}))
-hs.hotkey.bind({'ctrl', 'cmd', 'alt'}, 'k', keyCode('up', {'cmd', 'alt'}), nil, keyCode('up', {'cmd', 'alt'}))
-hs.hotkey.bind({'ctrl', 'cmd', 'alt'}, 'l', keyCode('right', {'cmd', 'alt'}), nil, keyCode('right', {'cmd', 'alt'}))
+return module
