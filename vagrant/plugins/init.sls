@@ -2,7 +2,7 @@
 {%- set plugins = salt['pillar.get']('vagrant:plugins', []) %}
 
 include:
-  - vagrant
+  - brew.cask
 
 {%- if plugins %}
 vagrant_plugins:
@@ -11,5 +11,5 @@ vagrant_plugins:
     - name: vagrant plugin install {{ plugins | join(' ') }}
     - user: {{ user }}
     - require:
-      - cmd: vagrant
+      - cmd: brew_cask_vagrant
 {%- endif %}
