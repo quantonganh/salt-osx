@@ -1,0 +1,29 @@
+{%- set heap_size = salt['pillar.get']('youtrack:heap_size', '1g') -%}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+
+    <key>Label</key>
+    <string>jetbrains.youtrack.server</string>
+
+    <key>WorkingDirectory</key>
+    <string>/usr/local/youtrack</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/java</string>
+	<string>-Xmx{{ heap_size }}</string>
+        <string>-XX:MaxMetaspaceSize=250M</string>
+	<string>-Djava.awt.headless=true</string>
+	<string>-Djetbrains.youtrack.disableBrowser=true</string>
+        <string>-jar</string>
+	<string>/usr/local/youtrack/{{ jarfile }}</string>
+        <string>8081</string>
+    </array>
+
+    <key>KeepAlive</key>
+    <true/>
+
+  </dict>
+</plist>
