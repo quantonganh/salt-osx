@@ -1,26 +1,31 @@
-{%- from "macros.jinja2" import user, home, downloads with context %}
+{%- from "macros.jinja2" import user, home with context %}
 {%- set version = '0.9.49' %}
 
-hammerspoon:
-  file:
-    - managed
-    - name: {{ downloads }}/Hammerspoon-{{ version }}.zip
-    - source: https://github.com/Hammerspoon/hammerspoon/releases/download/{{ version }}/Hammerspoon-{{ version }}.zip
-    - source_hash: md5=e0625576c54286a410ddb6557d09898d
-  module:
-    - wait
-    - name: archive.cmd_unzip
-    - zip_file: {{ downloads }}/Hammerspoon-{{ version }}.zip
-    - dest: /Applications
-    - watch:
-      - file: hammerspoon
+include:
+  - brew
 
-{{ home }}/.hammerspoon/init.lua:
+{{ home }}/.hammerspoon:
+  file:
+    - directory
+    - user: {{ user }}
+    - group: staff
+    - mode: 755
+
+hammerspoon:
+  cmd:
+    - run
+    - user: {{ user }}
+    - name: brew cask install hammerspoon
+    - unless: test -d /usr/local/Caskroom/hammerspoon
+    - require:
+      - cmd: brew
   file:
     - managed
+    - name: {{ home }}/.hammerspoon/init.lua
     - source: salt://hammerspoon/config.lua
     - user: {{ user }}
     - group: staff
     - mode: 400
     - require:
-      - module: hammerspoon
+      - cmd: hammerspoon
+      - file: {{ home }}/.hammerspoon
