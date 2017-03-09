@@ -2,7 +2,7 @@
 {%- set home = salt['user.info'](user)['home'] %}
 
 include:
-  - pkgs
+  - brew
 
 prezto:
   git:
@@ -14,7 +14,7 @@ prezto:
     - unless: test -d {{ home }}/.zprezto
   cmd:
     - wait_script
-    - name: salt://prezto/default.zsh
+    - name: salt://zsh/prezto/default.zsh
     - user: {{ user }}
     - shell: /bin/zsh
     - watch:
@@ -22,7 +22,7 @@ prezto:
   file:
     - managed
     - name: {{ home }}/.zpreztorc
-    - source: salt://prezto/config.rc
+    - source: salt://zsh/prezto/config.rc
     - user: {{ user }}
     - group: staff
     - mode: 640
@@ -69,4 +69,4 @@ prezto-prompt:
     - watch:
       - git: prezto
     - require:
-      - pkg: mypkgs
+      - pkg: brew
