@@ -1,0 +1,7 @@
+server {
+    listen 80;
+    server_name {{ salt['pillar.get']('redmine:hostname', 'redmine.local') }};
+
+    root /Library/WebServer/Documents/redmine-{{ version }}/public;
+    passenger_enabled on;
+}

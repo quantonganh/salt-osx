@@ -1,6 +1,7 @@
 production:
-  adapter: mysql2
-  database: redmine
+  adapter: postgresql
+  database: {{ salt['pillar.get']('redmine:postgres:name', 'redmine') }}
   host: localhost
-  username: redmine
-  password: {{ pillar['redmine']['mysql']['password'] }}
+  username: {{ salt['pillar.get']('redmine:postgres:username', 'redmine') }}
+  password: {{ salt['pillar.get']('redmine:postgres:password') }}
+  encoding: utf8
