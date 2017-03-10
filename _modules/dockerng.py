@@ -1073,7 +1073,7 @@ def _image_wrapper(attr, *args, **kwargs):
         output = func(*args, **kwargs)
         if not kwargs.get('stream', False):
             output = output.splitlines()
-        for line in output:
+        for line in ''.join(output).splitlines():
             ret.append(json.loads(line))
     except docker.errors.APIError as exc:
         if catch_api_errors:
