@@ -1,6 +1,7 @@
 {%- from 'macros.jinja2' import user, home %}
 
 include:
+  - zsh
   - zsh.prezto.absent
 
 zim:
@@ -16,7 +17,7 @@ zim:
     - shell: /bin/zsh
     - name: salt://zsh/zim/copy_templates.zsh
     - require:
-      - file: prezto
+      - sls: zsh.prezto.absent
     - watch:
       - git: zim
   file:

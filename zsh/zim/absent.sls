@@ -6,3 +6,5 @@ zim:
     - names:
       - {{ home }}/.zim
       - {{ home }}/.zimrc
+      - {{ home }}/.zlogin
+      - {{ home }}/.zshrc.d/zim.zsh
