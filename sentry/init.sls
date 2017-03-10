@@ -1,13 +1,14 @@
-{%- from "macros.jinja2" import user, home with context %}
+{%- from "macros.jinja2" import user, home with context -%}
+{%- set hostname = salt['pillar.get']('sentry:hostname', 'sentry.local') -%}
 
 include:
-  - apache
+  - nginx
   - postgresql
   - redis
   - supervisor
   - virtualenv
 
-{%- set username = salt['pillar.get']('sentry:db:username', 'sentry') %}
+{%- set username = salt['pillar.get']('sentry:postgres:username', 'sentry') %}
 
 sentry:
   virtualenv:
@@ -34,13 +35,13 @@ sentry:
   postgres_user:
     - present
     - name: {{ username }}
-    - password: {{ salt['pillar.get']('sentry:db:password') }}
+    - password: {{ salt['pillar.get']('sentry:postgres:password') }}
     - user: {{ user }}
     - require:
       - service: postgresql
   postgres_database:
     - present
-    - name: {{ salt['pillar.get']('sentry:db:name', 'sentry') }}
+    - name: {{ salt['pillar.get']('sentry:postgres:database', 'sentry') }}
     - owner: {{ username }}
     - user: {{ user }}
     - require:
@@ -57,6 +58,10 @@ sentry:
     - watch:
       - pip: sentry
       - file: sentry
+  host:
+    - present
+    - name: {{ hostname }}
+    - ip: 127.0.0.1
 
 sentry_admin_user:
   cmd:
@@ -92,13 +97,16 @@ sentry_admin_user:
     - watch_in:
       - service: supervisor
 
-/etc/apache2/other/sentry.conf:
+/usr/local/etc/nginx/servers/sentry.conf:
   file:
     - managed
-    - source: salt://sentry/apache.jinja2
+    - source: salt://nginx/template.jinja2
     - template: jinja
-    - user: root
-    - group: wheel
+    - user: {{ user }}
+    - group: admin
     - mode: 644
+    - context:
+        hostname: {{ hostname }}
+        port: 9000
     - watch_in:
-      - service: apache
+      - service: nginx
