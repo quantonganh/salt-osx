@@ -2,19 +2,24 @@
 
 include:
   - brew
+  - zsh
 
 zsh-completions:
   pkg:
-    - installed
+    - latest
     - require:
       - cmd: brew
   file:
-    - append
-    - name: {{ home }}/.zshrc
-    - text: |
+    - managed
+    - name: {{ home }}/.zshrc.d/completions.zsh
+    - contents: |
         fpath=(/usr/local/share/zsh-completions $fpath)
+    - user: {{ user }}
+    - group: staff
+    - mode: 644
     - require:
       - pkg: zsh-completions
+      - file: {{ home }}/.zshrc.d
 
 zcompdump:
   file:
@@ -24,6 +29,8 @@ zcompdump:
       - file: zsh-completions
   cmd:
     - run
+    - user: {{ user }}
+    - shell: /bin/zsh
     - name: |
         autoload -Uz compinit
         compinit
