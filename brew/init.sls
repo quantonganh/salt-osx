@@ -15,12 +15,16 @@ brew:
     - name: {{ home }}/.zshrc.d/brew.zsh
     - contents: |
         alias b="brew"
-        alias bs="brew search"
-        alias bif="brew info"
         alias bi="brew install"
-        alias bu="brew upgrade"
-        alias br="brew uninstall"
+        alias bif="brew info"
         alias bl="brew list"
+        alias br="brew uninstall"
+        alias bs="brew search"
+        alias bu="brew upgrade"
+        alias bud="brew update"
+    - user: {{ user }}
+    - group: staff
+    - mode: 644
     - require:
       - cmd: brew
       - file: {{ home }}/.zshrc.d
