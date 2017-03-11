@@ -16,7 +16,7 @@ z:
     - group: staff
     - mode: 644
     - contents: |
-        . `brew --prefix`/etc/profile.d/z.sh
+        . /usr/local/etc/profile.d/z.sh
     - require:
       - pkg: z
       - file: {{ home }}/.zshrc.d
