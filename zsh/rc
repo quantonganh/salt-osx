@@ -1,0 +1,29 @@
+# bash-style backward-kill-word
+autoload -U select-word-style
+select-word-style bash
+
+# Source zim
+if [[ -s ${ZDOTDIR:-${HOME}}/.zim/init.zsh ]]; then
+  source ${ZDOTDIR:-${HOME}}/.zim/init.zsh
+fi
+
+# Set tab title
+precmd() {
+  echo -ne "\033]0;$(basename "$(dirname "$PWD")")/${PWD##*/}\007"
+}
+
+# Customize to your needs...
+alias ..="cd .."
+alias ss="sudo salt-call -l debug state.sls $1"
+alias v="/usr/local/bin/mvim -v"
+alias de="docker exec -it $1 /bin/bash"
+
+# Turn off history verification
+setopt nohistverify
+
+# Load all files from .zshrc.d directory
+if [ -d $HOME/.zshrc.d ]; then
+  for file in $HOME/.zshrc.d/^zim.zsh(.N); do
+    source $file
+  done
+fi
