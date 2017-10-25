@@ -1,5 +1,10 @@
 call plug#begin('~/.vim/bundle')
 {%- for plug in salt['pillar.get']('vim:plugins') %}
+  {%- if plug is mapping %}
+    {%- set plugin, options = salt['pillar.get']('vim:plugins')[loop.index0].items()[0] %}
+Plug '{{ plugin }}', { {% for option in options %}{% for k, v in option.items() %}'{{ k }}': '{{ v }}'{% endfor %}{% if not loop.last %}, {% endif %}{% endfor %} }
+  {%- else %}
 Plug '{{ plug }}'
+  {%- endif %}
 {%- endfor %}
 call plug#end()
