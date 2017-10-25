@@ -16,6 +16,7 @@ vim_fugitive:
     - contents: |
         nnoremap <leader>gs :Gstatus<CR>
         nnoremap <leader>gc :Gcommit -v -q<CR>
+        nnoremap <leader>gca :Gcommit -a<CR>
         nnoremap <leader>gt :Gcommit -v -q %:p<CR>
         nnoremap <leader>gd :Gdiff<CR>
         nnoremap <leader>gid :Git diff --no-ext-diff --cached<CR>
