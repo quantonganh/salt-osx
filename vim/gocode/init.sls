@@ -13,4 +13,4 @@ vim_gocode:
     - user: {{ user }}
     - unless: test -d {{ home }}/.vim/bundle/vim-gocode
     - require:
-      - git: vim_go
+      - file: vim_go
