@@ -4,7 +4,6 @@
 
 include:
   - vim.pathogen
-  - vim.powerline.absent
 
 vim_airline:
   git:
@@ -20,4 +19,4 @@ vim_airline:
         set laststatus=2
     - require:
       - git: vim_airline
-      - file: {{ home }}.vimrc.d
+      - file: {{ home }}/.vimrc.d
