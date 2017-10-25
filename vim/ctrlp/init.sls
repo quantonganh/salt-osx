@@ -16,7 +16,6 @@ vim_ctrlp:
     - managed
     - name: {{ home }}/.vimrc.d/ctrlp.vim
     - contents: |
-        let mapleader = "\<Space>"
         set runtimepath^=~/.vim/bundle/ctrlp.vim
         let g:ctrlp_map = '<leader>f'
         map <leader>b :CtrlPBuffer
