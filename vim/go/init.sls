@@ -10,7 +10,7 @@ vim_go:
     - name: {{ home }}/.vimrc.d/go.vim
     - contents: |
         au FileType go nmap <leader>gr <Plug>(go-run)
-        au FileType go nmap <leader>b <Plug>(go-build)
+        au FileType go nmap <leader>gb <Plug>(go-build)
         au FileType go nmap <leader>t <Plug>(go-test)
         au FileType go nmap <leader>gc <Plug>(go-coverage)
 
@@ -29,14 +29,14 @@ vim_go:
         au FileType go nmap <Leader>e <Plug>(go-rename)
 
         let g:go_highlight_functions = 1
-        let g:go_highlight_methods = 1
+        let g:go_highlight_function_calls = 1
         let g:go_highlight_structs = 1
         let g:go_highlight_operators = 1
         let g:go_highlight_build_constraints = 1
 
         let g:go_fmt_command = "goimports"
         let g:go_fmt_fail_silently = 1
-        let g:go_fmt_autosave = 0
+        let g:go_fmt_autosave = 1
         let g:go_play_open_browser = 0
         let g:go_get_update = 0
     - user: {{ user }}
