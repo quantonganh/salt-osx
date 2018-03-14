@@ -30,11 +30,6 @@ let g:SuperTabDefaultCompletionType = "context"
 
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-Bundle 'gmarik/vundle'
-
 set nocompatible
 filetype plugin indent on
 autocmd BufRead,BufNewFile *.jinja2 set filetype=jinja
@@ -45,6 +40,7 @@ au BufNewFile *.jinja2 so ~/.vim/header/jinja_header.txt
 au BufNewFile *.py so ~/.vim/header/py_header.txt
 au BufNewFile *.sls so ~/.vim/header/sls_header.txt
 
+let mapleader = "\<Space>"
 nnoremap <Leader>o :CtrlP<CR>
 nnoremap <Leader>w :w<CR>
 vmap <Leader>y "+y
@@ -65,6 +61,14 @@ set colorcolumn=+1
 " disable folding
 set nofoldenable
 " end of disable folding
+
+autocmd filetype crontab setlocal nobackup nowritebackup
+
+set hidden
+:nnoremap <Tab> :bnext<CR>
+:nnoremap <S-Tab> :bprevious<CR>
+
+set completeopt=longest,menuone
 
 for fpath in split(globpath('~/.vimrc.d/', '*.vim'), '\n')
   exe 'source' fpath
