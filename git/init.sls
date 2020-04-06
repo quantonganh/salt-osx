@@ -10,7 +10,7 @@ git:
     - shell: /bin/sh
     - home: {{ home }}/git
     - createhome: False
-    - requite:
+    - require:
       - group: git
   cmd:
     - run
