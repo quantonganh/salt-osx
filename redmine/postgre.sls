@@ -1,7 +1,7 @@
 {%- from "macros.jinja2" import user, home, downloads with context %}
 {%- set username = salt['pillar.get']('redmine:psql:username', 'redmine') -%}
 
-redmine:
+redmine_postgres:
   postgres_user:
     - present
     - name: {{ username }}

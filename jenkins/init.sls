@@ -2,7 +2,6 @@
 
 include:
   - brew
-  - java
   - nginx
 
 jenkins:

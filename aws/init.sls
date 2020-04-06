@@ -1,5 +1,6 @@
 {%- set key = salt['pillar.get']('aws:key') -%}
 {%- set secret = salt['pillar.get']('aws:secret') %}
+{%- set subnets = salt['pillar.get']('vpc:subnets') %}
 
 aws_import_key_pair:
    boto_ec2:
@@ -31,7 +32,7 @@ aws_iam_role:
               Effect: Allow
               Resource: "*"
 
-{%- for group, config in salt['pillar.get']('iam:groups').iteritems() %}
+{%- for group, config in salt['pillar.get']('iam:groups', {}).iteritems() %}
   {%- for user in config['users'] %}
 aws_iam_{{ user }}_user:
   boto_iam:
@@ -120,7 +121,8 @@ aws_ec2_network:
     - require:
       - boto_secgroup: aws_singapore
 
-{%- for subnet in salt['pillar.get']('vpc:subnets') %}
+{%- if subnets %}
+  {%- for subnet in subnets %}
 aws_vpc_{{ subnet }}_subnet:
   boto_vpc:
     - subnet_present
@@ -133,7 +135,8 @@ aws_vpc_{{ subnet }}_subnet:
     - key: "{{ secret }}"
     - require:
       - boto_vpc: aws_singapore
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}
 
 aws_vpc_gateway:
   boto_vpc:
@@ -169,20 +172,24 @@ aws_rds_subnet_group:
     - name: private-a-sg
     - description: "subnet group for the Private-A and Private-B"
     - subnet_names:
-{%- for subnet in salt['pillar.get']('vpc:subnets') %}
-  {%- if subnet.startswith('Private-') %}
+{%- if subnets %}
+  {%- for subnet in subnets %}
+    {%- if subnet.startswith('Private-') %}
       - {{ subnet }}
-  {%- endif %}
-{%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
     - region: ap-southeast-1
     - keyid: {{ key }}
     - key: "{{ secret }}"
+{%- if subnets %}
     - require:
-{%- for subnet in salt['pillar.get']('vpc:subnets') %}
+  {%- for subnet in subnets %}
       - boto_vpc: aws_vpc_{{ subnet  }}_subnet
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}
 
-{%- for engine, config in salt['pillar.get']('rds:engines').iteritems() %}
+{%- for engine, config in salt['pillar.get']('rds:engines', {}).iteritems() %}
 aws_{{ engine }}_rds:
   boto_rds:
     - present

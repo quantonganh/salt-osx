@@ -6,7 +6,6 @@ include:
   - brew
   - nginx
   - postgresql
-  - ruby
 
 redmine:
   pkg:
@@ -21,8 +20,6 @@ redmine:
       - bundler
       - pg
       - rails
-    - require:
-      - pkg: ruby
   archive:
     - extracted
     - name: /Library/WebServer/Documents/

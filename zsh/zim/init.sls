@@ -2,7 +2,6 @@
 
 include:
   - zsh
-  - zsh.prezto.absent
 
 zim:
   git:
@@ -16,8 +15,6 @@ zim:
     - user: {{ user }}
     - shell: /bin/zsh
     - name: salt://zsh/zim/copy_templates.zsh
-    - require:
-      - sls: zsh.prezto.absent
     - watch:
       - git: zim
   file:
