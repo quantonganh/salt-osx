@@ -21,8 +21,8 @@ vim_airline:
         " Enable the list of buffers
         let g:airline#extensions#tabline#enabled = 1
 
-        " Show just the filename
-        let g:airline#extensions#tabline#fnamemod = ':t'
+        " Show the dir/filename
+        let g:airline#extensions#tabline#formatter = 'short_path'
 
         " Show buffer number
         let g:airline#extensions#tabline#buffer_nr_show = 1
