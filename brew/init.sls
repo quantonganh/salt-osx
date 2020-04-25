@@ -16,7 +16,7 @@ brew:
     - contents: |
         alias b="brew"
         alias bi="brew install"
-        alias bif="brew info"
+        alias bo="brew info"
         alias bl="brew list"
         alias br="brew uninstall"
         alias bs="brew search"

@@ -17,8 +17,10 @@ precmd() {
 
 # Customize to your needs...
 alias ..="cd .."
+alias c="bat"
+alias ls="exa"
 alias ss="sudo salt-call -l debug state.sls $1"
-alias v="/usr/local/bin/mvim -v"
+alias v="/usr/local/bin/nvim"
 alias de="docker exec -it $1 /bin/bash"
 
 # Turn off history verification
