@@ -6,7 +6,6 @@ include:
 tig:
   pkg:
     - installed
-    - version: latest
     - require:
       - cmd: brew
   file:
@@ -15,7 +14,6 @@ tig:
     - contents: |
         alias t="tig"
         alias tl="tig log"
-        alias ts="tig show"
         alias tb="tig blame"
         alias tg="tig grep"
         alias ts="tig status"
