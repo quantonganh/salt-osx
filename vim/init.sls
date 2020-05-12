@@ -1,5 +1,6 @@
 {%- set user = salt['cmd.run']('stat -f "%Su" /dev/console') %}
 {%- set home = salt['user.info'](user)['home'] %}
+{%- set file_roots = salt['config.get']('file_roots:base')[0] %}
 
 vimrc:
   file:
@@ -18,7 +19,7 @@ vimrc:
     - group: staff
     - mode: 755
 
-{%- for rcfile in salt['file.find']('/srv/salt/vim/rc.d', name='*.vim', type='f', print='name') %}
+{%- for rcfile in salt['file.find'](file_roots + '/vim/rc.d', name='*.vim', type='f', print='name') %}
 {{ home }}/.vimrc.d/{{ rcfile }}:
   file:
     - managed
