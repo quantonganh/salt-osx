@@ -17,11 +17,17 @@ precmd() {
 
 # Customize to your needs...
 alias ..="cd .."
+alias ag="ag --ignore vendor $1"
 alias c="bat"
-alias ls="exa"
-alias ss="sudo salt-call -l debug state.sls $1"
-alias v="/usr/local/bin/nvim"
+alias d="docker"
+alias dc="docker-compose $1"
 alias de="docker exec -it $1 /bin/bash"
+alias dl="docker logs $1"
+alias dps="docker ps | grep $1"
+alias lg="lazygit"
+alias ls="exa"
+alias o="open"
+alias v="/usr/local/bin/nvim"
 
 # Turn off history verification
 setopt nohistverify
@@ -32,3 +38,5 @@ if [ -d $HOME/.zshrc.d ]; then
     source $file
   done
 fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
